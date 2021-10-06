@@ -26,11 +26,13 @@ const App = () => {
         setTasks(newTasks)
     }
     const changeStatus = (taskId: string, isDone: boolean) => {
-        let task = tasks.find(t => t.id === taskId);
-        if (task) {
-            task.isDone = isDone;
-        }
-        setTasks([...tasks]);
+        // let task = tasks.find(t => t.id === taskId);
+        // if (task) {
+        //     task.isDone = isDone;
+        // }
+        // setTasks([...tasks]);
+        const updatedTaskStatus = tasks.map(t => t.id === taskId ? {...t, isDone: isDone} : t);
+        setTasks(updatedTaskStatus);
     }
 
     let tasksForToDoList = tasks;

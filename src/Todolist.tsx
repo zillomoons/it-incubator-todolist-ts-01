@@ -5,7 +5,6 @@ export type TaskType = {
     id: string
     title: string
     isDone: boolean
-
 }
 type ToDoListPropsType = {
     title: string
@@ -19,22 +18,23 @@ type ToDoListPropsType = {
 
 export const Todolist = (props: ToDoListPropsType) => {
     let [newTaskTitle, setNewTaskTitle] = useState('')
-    let [error, setError] = useState<string | null>(null)
+    let [error, setError] = useState<boolean>(false)
 
     const onNewTaskChanged = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(event.currentTarget.value)
     }
     const addNewTaskTitle = () => {
-        if (newTaskTitle.trim() !== ''){
-            props.addTask(newTaskTitle);
+        const trimmedTitle = newTaskTitle.trim();
+        if (trimmedTitle){
+            props.addTask(trimmedTitle);
             setNewTaskTitle('')
         } else {
-            setError('Title is required')
+            setError(true)
         }
 
     }
     const addNewTaskWithEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        setError(false);
         if (e.key === 'Enter') {
             addNewTaskTitle()
         }
@@ -53,11 +53,12 @@ export const Todolist = (props: ToDoListPropsType) => {
         <h3>{props.title}</h3>
         <div>
             <input value={newTaskTitle}
+                   placeholder={'Enter new task title'}
                    onChange={onNewTaskChanged}
                    className={error ? 'error' : ''}
                    onKeyPress={addNewTaskWithEnter}/>
             <button onClick={addNewTaskTitle}>+</button>
-            {error && <div className={'error-message'}>{error}</div>}
+            {error && <div className={'error-message'}>Title is required</div>}
         </div>
         <ul>
             {
