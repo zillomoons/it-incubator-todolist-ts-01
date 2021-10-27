@@ -1,4 +1,4 @@
-import {Button} from "./Button";
+import {MyButton} from "./Button";
 import {Input} from "./Input";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 
@@ -7,29 +7,29 @@ type PropsType = {
 }
 
 export const AddItemInput =({addNewItemTitle}:PropsType)=>{
-    const [newTaskTitle, setNewTaskTitle] = useState('')
+    const [newTitle, setNewTitle] = useState('')
     const [error, setError] = useState<boolean>(false)
 
     const onNewTaskChanged = (event: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(event.currentTarget.value)
+        setNewTitle(event.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(false);
-        e.key === 'Enter' && addNewTaskTitle()
+        e.key === 'Enter' && addNewTitle()
     }
-    const addNewTaskTitle = () => {
-        const trimmedTitle = newTaskTitle.trim();
+    const addNewTitle = () => {
+        const trimmedTitle = newTitle.trim();
         if (trimmedTitle){
             addNewItemTitle(trimmedTitle);
-            setNewTaskTitle('')
+            setNewTitle('')
         } else {
             setError(true)
         }
     }
     return (
         <div className={'inputWithButton'}>
-            <Input value={newTaskTitle} onChange={onNewTaskChanged} onKeyPress={onKeyPressHandler} error={error} />
-            <Button name={'+'} callback={addNewTaskTitle} />
+            <Input value={newTitle} onChange={onNewTaskChanged} onKeyPress={onKeyPressHandler} error={error} />
+            <MyButton name={'+'} callback={addNewTitle} />
         </div>
     )
 }

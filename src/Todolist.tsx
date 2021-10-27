@@ -1,8 +1,9 @@
-import React, {ChangeEvent} from "react";
-import {FilterValuesType} from "./App";
-import {Button} from "./components/Button";
+import React from "react";
 import {AddItemInput} from "./components/AddItemInput";
-import {SpanWithEditMode} from "./components/SpanWithEditMode";
+import {FilterValuesType} from "./state/todoListReducer";
+import {Task} from "./components/Task";
+import {TodoTitle} from "./components/TodoTitle";
+import {FilterBlock} from "./components/FilterBlock";
 
 export type TaskType = {
     id: string
@@ -10,64 +11,38 @@ export type TaskType = {
     isDone: boolean
 }
 type ToDoListPropsType = {
-    todoId: string
+    todoID: string
     title: string
     tasks: TaskType[]
-    removeTask: (taskID: string, todoID: string) => void
-    changeFilter: (value: FilterValuesType, todoID: string) => void
-    addTask: (titleTask: string, todoID: string) => void
-    changeStatus: (id: string, isDone: boolean, todoID: string) => void
+    removeTask: (taskID: string) => void
+    changeFilter: (value: FilterValuesType) => void
+    addTask: (title: string) => void
+    changeStatus: (taskID: string, isDone: boolean) => void
     filter: FilterValuesType
-    removeTodoList: (todoID: string) => void
-    editTaskTitle: (todoID: string, taskID: string, title: string)=> void
-    editTodoTitle: (todoID: string, title: string)=> void
+    removeTodoList: () => void
+    editTaskTitle: (taskID: string, title: string) => void
+    editTodoTitle: (title: string) => void
 }
 
-export const Todolist = ({todoId, tasks, changeFilter, filter, ...props}: ToDoListPropsType) => {
-    const addNewItemTitle = (title: string) => {
-        props.addTask(title, todoId);
-    }
-    const removeTodoList = () => props.removeTodoList(todoId);
+export const Todolist = ({
+                             title, tasks, changeFilter, filter,
+                             removeTask, addTask, changeStatus,
+                             editTaskTitle, editTodoTitle, removeTodoList
+                         }: ToDoListPropsType) => {
 
-    const filterHandler = (value: FilterValuesType) => changeFilter(value, todoId)
-    const onRemoveHandler = (taskID: string) => {
-        props.removeTask(taskID, todoId)
-    }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, taskID: string) => {
-        props.changeStatus(taskID, e.currentTarget.checked, todoId);
-    }
-    const editTodoTitle = (title: string)=> {
-        props.editTodoTitle(todoId, title)
-    }
+    const mappedTasks = tasks.map((t) => {
+        return <Task key={t.id}
+                     title={t.title}
+                     isDone={t.isDone}
+                     changeStatus={(isDone) => changeStatus(t.id, isDone)}
+                     editTaskTitle={(title) => editTaskTitle(t.id, title)}
+                     removeTask={() => removeTask(t.id)}/>
 
+    })
     return <div>
-        <h3>
-            <SpanWithEditMode title={props.title} editTitle={editTodoTitle} />
-            <Button name={'x'} callback={removeTodoList} />
-        </h3>
-        <AddItemInput addNewItemTitle={addNewItemTitle} />
-        <ul>
-            {
-                tasks.map((t) => {
-                    const editTaskTitle = (title: string)=> {
-                        props.editTaskTitle(todoId, t.id, title)
-                    }
-                    return (
-                        <li key={t.id}  className={t.isDone ? 'is-done' : ''}>
-                            <input type="checkbox"
-                                   onChange={(e)=>onChangeHandler(e, t.id)}
-                                   checked={t.isDone}/>
-                            <SpanWithEditMode title={t.title} editTitle={editTaskTitle}/>
-                            <Button name={'x'} callback={()=>onRemoveHandler(t.id)} />
-                        </li>
-                    )
-                })
-            }
-        </ul>
-        <div>
-            <Button name={'all'} callback={()=>filterHandler('all')} filter={filter}/>
-            <Button name={'active'} callback={()=>filterHandler('active')} filter={filter} />
-            <Button name={'completed'} callback={()=>filterHandler('completed')} filter={filter}/>
-        </div>
+        <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
+        <AddItemInput addNewItemTitle={addTask}/>
+        {mappedTasks}
+        <FilterBlock filter={filter} changeFilter={changeFilter}/>
     </div>
 }

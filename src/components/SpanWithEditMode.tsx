@@ -1,8 +1,9 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 
-type PropsType = {
+type PropsType =  {
     title: string
-    editTitle: (title: string)=> void
+    editTitle: (title: string) => void
+
 }
 
 export const SpanWithEditMode = ({title, editTitle}: PropsType) => {
@@ -16,11 +17,16 @@ export const SpanWithEditMode = ({title, editTitle}: PropsType) => {
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
     }
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        e.key === 'Enter' && deactivateEditMode()
+    }
     const deactivateEditMode = () => {
         setEditMode(false);
-        editTitle(value)
+        value.trim() && editTitle(value)
     }
     return editMode
-        ? <input value={value} onChange={onInputChange} onBlur={deactivateEditMode} autoFocus/>
+        ? <input value={value} onChange={onInputChange}
+                 onKeyPress={onKeyPressHandler}
+                 onBlur={deactivateEditMode} autoFocus/>
         : <span onDoubleClick={activateEditMode}>{title}</span>
 }
