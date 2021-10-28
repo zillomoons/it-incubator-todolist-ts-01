@@ -1,6 +1,8 @@
 import {SpanWithEditMode} from "./SpanWithEditMode";
 import {MyButton} from "./Button";
 import React from "react";
+import {DeleteButton} from "./DeleteButton";
+import styled from "styled-components";
 
 type PropsType = {
     title: string
@@ -9,8 +11,14 @@ type PropsType = {
 }
 
 export const TodoTitle = ({title, editTodoTitle, removeTodoList}: PropsType) => {
-    return <h3>
+    return <TodoTitleStyled>
         <SpanWithEditMode title={title} editTitle={editTodoTitle}/>
-        <MyButton name={'x'} callback={removeTodoList}/>
-    </h3>
+        <DeleteButton callback={removeTodoList}/>
+    </TodoTitleStyled>
 }
+
+const TodoTitleStyled = styled.h3`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+`

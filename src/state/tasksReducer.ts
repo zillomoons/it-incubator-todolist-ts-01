@@ -1,10 +1,11 @@
 import {v1} from "uuid";
-import {AddNewTodoAC, todoListId_1, todoListId_2} from "./todoListReducer";
+import {AddNewTodoAC, RemoveTodoListAC, todoListId_1, todoListId_2} from "./todoListReducer";
 import {TaskType} from "../Todolist";
 
 export type TaskStateType = { [key: string]: TaskType[] }
 type ActionsType = ReturnType<typeof RemoveTaskAC> | ReturnType<typeof AddTaskAC>
-    | ReturnType<typeof EditTaskTitleAC> | ReturnType<typeof ChangeTaskStatusAC> | ReturnType<typeof AddNewTodoAC>
+    | ReturnType<typeof EditTaskTitleAC> | ReturnType<typeof ChangeTaskStatusAC>
+    | ReturnType<typeof AddNewTodoAC> | ReturnType<typeof RemoveTodoListAC>
 
 const initialState: TaskStateType = {
     [todoListId_1]: [
@@ -50,6 +51,10 @@ export const tasksReducer = (state: TaskStateType, action: ActionsType): TaskSta
             }
         case "ADD-NEW-TODO":
             return {...state, [action.todoID] : []}
+        case "REMOVE-TODOLIST":
+            let stateCopy = {...state}
+            delete stateCopy[action.todoID]
+            return stateCopy;
         default:
             return state;
     }

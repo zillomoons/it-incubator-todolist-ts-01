@@ -17,6 +17,7 @@ import {
     RemoveTaskAC,
     tasksReducer,
 } from "./state/tasksReducer";
+import {Header} from "./components/Header";
 
 
 const App = () => {
@@ -45,9 +46,10 @@ const App = () => {
     //functions for todoList
 
     const addNewTodoList = (title: string) => {
+
         const newTodoID = v1();
-        dispatchTodoLists(AddNewTodoAC(newTodoID, title))
-        dispatchTasks(AddNewTodoAC(newTodoID, title))
+        dispatchTodoLists(AddNewTodoAC(newTodoID,title))
+        dispatchTasks(AddNewTodoAC(newTodoID,title))
     }
     const changeFilter = (todoID: string, value: FilterValuesType,) => {
         dispatchTodoLists(ChangeFilterAC(todoID, value))
@@ -93,9 +95,11 @@ const App = () => {
                              filter={todo.filter}/>
         })
     return (
-        <div className="App">
-            <AddItemInput addNewItemTitle={addNewTodoList}/>
-            {mappedTodoLists}
+        <div>
+            <Header addNewTodoList={addNewTodoList}/>
+            <div className="TodoLists">
+                {mappedTodoLists}
+            </div>
         </div>
     );
 }

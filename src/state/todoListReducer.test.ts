@@ -33,8 +33,9 @@ test('todolist reducer should edit correct todolist title', ()=> {
     expect(changedState[1].title).toBe('What to search')
 })
 test('todolist reducer should add new todo with correct title', ()=> {
-    let newTodoID = v1()
-    let changedState = todoListReducer(state, AddNewTodoAC(newTodoID,'What to watch'))
+
+    let newTodoID ='dfdfdsfdsf'
+    let changedState = todoListReducer(state, AddNewTodoAC( newTodoID,'What to watch'))
 
     expect(changedState.length).toBe(3)
     expect(changedState[1].title).toBe('What to learn')
@@ -42,7 +43,7 @@ test('todolist reducer should add new todo with correct title', ()=> {
 })
 test('todolist reducer should change filter correctly', ()=> {
 
-    let changedState = todoListReducer(state, ChangeFilterAC("completed", todoListId_2))
+    let changedState = todoListReducer(state, ChangeFilterAC(todoListId_2,"completed" ))
 
     expect(changedState.length).toBe(2)
     expect(changedState[1].filter).toBe('completed')

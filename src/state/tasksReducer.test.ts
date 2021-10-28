@@ -30,13 +30,13 @@ beforeEach(()=>{
     }
 })
 test('tasksReducer should remove task from correct todolist', ()=> {
-    let changedState = tasksReducer(startState, RemoveTaskAC('ddf86', todoListId_2))
+    let changedState = tasksReducer(startState, RemoveTaskAC(todoListId_2,'ddf86' ))
 
     expect(changedState[todoListId_1].length).toBe(6);
     expect(changedState[todoListId_2].length).toBe(4);
 })
 test('tasksReducer should add task with correct title in correct todolist', ()=> {
-    let changedState = tasksReducer(startState, AddTaskAC('NodeJS', todoListId_1))
+    let changedState = tasksReducer(startState, AddTaskAC(todoListId_1, 'NodeJS'))
 
     expect(changedState[todoListId_1].length).toBe(7);
     expect(changedState[todoListId_1][0].title).toBe('NodeJS')
@@ -52,7 +52,7 @@ test('tasksReducer should edit title of correct task', ()=> {
 })
 test('tasksReducer should change status in correct task', ()=> {
     let newTitle = 'Ice cream'
-    let changedState = tasksReducer(startState, ChangeTaskStatusAC('ddf87', true, todoListId_2))
+    let changedState = tasksReducer(startState, ChangeTaskStatusAC(todoListId_2,'ddf87', true))
 
     expect(changedState[todoListId_1].length).toBe(6);
     expect(changedState[todoListId_2][3].isDone).toBe(true)

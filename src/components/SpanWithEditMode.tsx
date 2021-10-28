@@ -1,6 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import styled from "styled-components";
 
-type PropsType =  {
+type PropsType = {
     title: string
     editTitle: (title: string) => void
 
@@ -25,8 +26,21 @@ export const SpanWithEditMode = ({title, editTitle}: PropsType) => {
         value.trim() && editTitle(value)
     }
     return editMode
-        ? <input value={value} onChange={onInputChange}
+        ? <StyledInput value={value} onChange={onInputChange}
                  onKeyPress={onKeyPressHandler}
                  onBlur={deactivateEditMode} autoFocus/>
-        : <span onDoubleClick={activateEditMode}>{title}</span>
+        : <StyledSpan onDoubleClick={activateEditMode}>{title}</StyledSpan>
 }
+const StyledInput = styled.input`
+  display: inline;
+  margin: 0;
+  width: 180px;
+  outline: none;
+  border: none;
+  color: lightslategrey;
+`
+const StyledSpan = styled.div`
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+`
+

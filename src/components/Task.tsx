@@ -1,6 +1,8 @@
 import React from "react"
 import {SpanWithEditMode} from "./SpanWithEditMode";
-import {MyButton} from "./Button";
+import {Checkbox} from "./Checkbox";
+import {DeleteButton} from "./DeleteButton";
+import styled from "styled-components";
 
 type PropsType = {
     title: string
@@ -10,14 +12,26 @@ type PropsType = {
     removeTask: () => void
 }
 
-export const Task = ({title, changeStatus, editTaskTitle, removeTask, isDone}:PropsType) => {
+export const Task = ({title, changeStatus, editTaskTitle, removeTask, isDone}: PropsType) => {
+    const TaskStyle = `${'taskStyle'} ${isDone ? 'is-done' : ''}`
     return (
-        <div>
-            <input type="checkbox"
-                   onChange={(e) => changeStatus(e.currentTarget.checked)}
-                   checked={isDone}/>
+        <TaskContainer className={TaskStyle}>
+            <label>
+                <Checkbox isDone={isDone} changeStatus={changeStatus}/>
+            </label>
             <SpanWithEditMode title={title} editTitle={editTaskTitle}/>
-            <MyButton name={'x'} callback={removeTask}/>
-        </div>
+            <DeleteButton callback={removeTask}/>
+        </TaskContainer>
     )
 }
+
+const TaskContainer = styled.div`
+  display: flex;
+  padding: 3px 5px;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
+  border-radius: 10px;
+  border: 2px solid lightgrey;
+  margin-bottom: 8px;
+`

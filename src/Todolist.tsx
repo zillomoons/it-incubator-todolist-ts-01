@@ -4,6 +4,7 @@ import {FilterValuesType} from "./state/todoListReducer";
 import {Task} from "./components/Task";
 import {TodoTitle} from "./components/TodoTitle";
 import {FilterBlock} from "./components/FilterBlock";
+import styled from "styled-components";
 
 export type TaskType = {
     id: string
@@ -39,10 +40,23 @@ export const Todolist = ({
                      removeTask={() => removeTask(t.id)}/>
 
     })
-    return <div>
+    return <StyledTodolist>
         <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
         <AddItemInput addNewItemTitle={addTask}/>
         {mappedTasks}
         <FilterBlock filter={filter} changeFilter={changeFilter}/>
-    </div>
+    </StyledTodolist>
 }
+
+const StyledTodolist = styled.div`
+  min-width: 320px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  padding: 10px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+`
