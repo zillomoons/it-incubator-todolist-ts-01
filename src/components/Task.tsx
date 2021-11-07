@@ -34,4 +34,8 @@ const TaskContainer = styled.div`
   border-radius: 10px;
   border: 2px solid lightgrey;
   margin-bottom: 8px;
+  
+  &:hover{
+    background: bisque;
+  }
 `

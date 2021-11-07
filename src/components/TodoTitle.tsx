@@ -1,5 +1,4 @@
 import {SpanWithEditMode} from "./SpanWithEditMode";
-import {MyButton} from "./Button";
 import React from "react";
 import {DeleteButton} from "./DeleteButton";
 import styled from "styled-components";

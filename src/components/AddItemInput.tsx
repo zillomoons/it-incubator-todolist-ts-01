@@ -1,5 +1,3 @@
-import {MyButton} from "./Button";
-import {Input} from "./Input";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import styled from "styled-components";
 import {StyledIconButton} from "./DeleteButton";

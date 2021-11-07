@@ -10,16 +10,13 @@ export type TodoListType = {
     filter: FilterValuesType
 }
 
-const initialState: TodoListType[] = [
-    {id: todoListId_1, title: 'What to learn', filter: 'all'},
-    {id: todoListId_2, title: 'What to buy', filter: 'all'},
-]
+const initialState: TodoListType[] = []
 type ActionsType = ReturnType<typeof RemoveTodoListAC>
     | ReturnType<typeof EditTodoTitleAC>
     | ReturnType<typeof AddNewTodoAC>
     | ReturnType<typeof ChangeFilterAC>
 
-export const todoListReducer = (state: TodoListType[], action: ActionsType): TodoListType[] => {
+export const todoListReducer = (state = initialState, action: ActionsType): TodoListType[] => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
             return state.filter(todo => todo.id !== action.todoID)
