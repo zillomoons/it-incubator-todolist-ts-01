@@ -5,8 +5,8 @@ import {v1} from "uuid";
 test('ids should be equal', ()=> {
     const startTasksState: TaskStateType = {};
     const startTodoListsState: TodoListType[] = [];
-    let newID = v1()
-    const action = AddNewTodoAC(newID,'new TodoList')
+    // let newID = v1()
+    const action = AddNewTodoAC('new TodoList')
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListReducer(startTodoListsState, action)
 

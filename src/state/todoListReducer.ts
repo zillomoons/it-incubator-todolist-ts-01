@@ -39,8 +39,8 @@ export const RemoveTodoListAC = (todoID: string) => {
 export const EditTodoTitleAC = (todoID: string, title: string) => {
     return {type: 'EDIT-TODO-TITLE', todoID, title} as const;
 }
-export const AddNewTodoAC = (todoID: string, title: string) => {
-    return {type: 'ADD-NEW-TODO', todoID, title} as const;
+export const AddNewTodoAC = (title: string) => {
+    return {type: 'ADD-NEW-TODO', todoID: v1(), title} as const;
 }
 export const ChangeFilterAC = (todoID: string, value: FilterValuesType, ) => {
     return {type: 'CHANGE-FILTER',todoID, value} as const;

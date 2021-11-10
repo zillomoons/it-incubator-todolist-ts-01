@@ -20,8 +20,8 @@ const App = () => {
     const todoLists = useSelector<rootReducerType, TodoListType[]>(state => state.todoLists);
 
     const addNewTodoList = (title: string) => {
-        const newTodoID = v1();
-        dispatch(AddNewTodoAC(newTodoID, title));
+        // const newTodoID = v1();
+        dispatch(AddNewTodoAC(title));
     }
     const removeTodoList = (todoID: string) => {
         dispatch(RemoveTodoListAC(todoID));
