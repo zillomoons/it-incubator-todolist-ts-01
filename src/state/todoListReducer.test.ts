@@ -34,8 +34,8 @@ test('todolist reducer should edit correct todolist title', ()=> {
 })
 test('todolist reducer should add new todo with correct title', ()=> {
 
-    let newTodoID ='dfdfdsfdsf'
-    let changedState = todoListReducer(state, AddNewTodoAC( newTodoID,'What to watch'))
+
+    let changedState = todoListReducer(state, AddNewTodoAC('What to watch'))
 
     expect(changedState.length).toBe(3)
     expect(changedState[1].title).toBe('What to learn')

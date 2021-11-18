@@ -7,14 +7,14 @@ type PropsType = {
     filter?: string
 }
 
-export const MyButton = ({name, callback, ...props}: PropsType) => {
+export const MyButton = React.memo(({name, callback, ...props}: PropsType) => {
     const onClickHandler = () => {
         callback()
     }
     return <StyledFilterBtn onClick={onClickHandler} activeFilter={props.filter === name}>
         {name}
     </StyledFilterBtn>
-}
+})
 
 const StyledFilterBtn = styled.button<{activeFilter : boolean}>`
   width: 100px;

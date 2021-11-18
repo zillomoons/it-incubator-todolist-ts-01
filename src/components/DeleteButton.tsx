@@ -6,9 +6,10 @@ type PropsType = {
     callback: () => void
 }
 
-export const DeleteButton = ({callback}: PropsType) => {
+export const DeleteButton = React.memo(({callback}: PropsType) => {
     return <StyledIconButton color={'red'} onClick={callback}><AiOutlineDelete/></StyledIconButton>
-}
+});
+
 export const StyledIconButton = styled.button<{
     size?: number,
     color?: string

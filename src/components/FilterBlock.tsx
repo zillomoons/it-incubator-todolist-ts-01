@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useCallback} from "react"
 import {MyButton} from "./Button";
 import {ChangeFilterAC, FilterValuesType} from "../state/todoListReducer";
 import {useDispatch} from "react-redux";
@@ -8,14 +8,14 @@ type PropsType = {
     todoID: string
 }
 
-export const FilterBlock = ({filter, todoID}: PropsType) => {
+export const FilterBlock = React.memo( ({filter, todoID}: PropsType) => {
     const dispatch = useDispatch();
-    const changeFilter = (value: FilterValuesType,) => {
+    const changeFilter = useCallback((value: FilterValuesType) => {
         dispatch(ChangeFilterAC(todoID, value));
-    }
+    }, [dispatch, todoID])
     return <div className={'filterBlock'}>
         <MyButton name={'all'} callback={() => changeFilter('all')} filter={filter}/>
         <MyButton name={'active'} callback={() => changeFilter('active')} filter={filter}/>
         <MyButton name={'completed'} callback={() => changeFilter('completed')} filter={filter}/>
     </div>
-}
+})

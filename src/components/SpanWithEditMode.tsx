@@ -7,10 +7,10 @@ type PropsType = {
 
 }
 
-export const SpanWithEditMode = ({title, editTitle}: PropsType) => {
+export const SpanWithEditMode = React.memo(({title, editTitle}: PropsType) => {
+    console.log('spanWithEditMode was called: '+title)
     const [editMode, setEditMode] = useState(false)
     const [value, setValue] = useState('')
-
     const activateEditMode = () => {
         setEditMode(true);
         setValue(title);
@@ -27,10 +27,10 @@ export const SpanWithEditMode = ({title, editTitle}: PropsType) => {
     }
     return editMode
         ? <StyledInput value={value} onChange={onInputChange}
-                 onKeyPress={onKeyPressHandler}
-                 onBlur={deactivateEditMode} autoFocus/>
+                       onKeyPress={onKeyPressHandler}
+                       onBlur={deactivateEditMode} autoFocus/>
         : <StyledSpan onDoubleClick={activateEditMode}>{title}</StyledSpan>
-}
+});
 const StyledInput = styled.input`
   display: inline;
   margin: 0;

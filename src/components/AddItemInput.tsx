@@ -7,15 +7,16 @@ type PropsType = {
     addNewItemTitle: (title: string) => void
 }
 
-export const AddItemInput = ({addNewItemTitle}: PropsType) => {
-    const [newTitle, setNewTitle] = useState('')
-    const [error, setError] = useState<boolean>(false)
+export const AddItemInput = React.memo(({addNewItemTitle}: PropsType) => {
+    console.log('AddItemInput was called')
+    const [newTitle, setNewTitle] = useState('');
+    const [error, setError] = useState<boolean>(false);
 
     const onNewTaskChanged = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(event.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(false);
+        error && setError(false);
         e.key === 'Enter' && addNewTitle()
     }
     const addNewTitle = () => {
@@ -38,7 +39,8 @@ export const AddItemInput = ({addNewItemTitle}: PropsType) => {
             </StyledIconButton>
         </StyledInputContainer>
     )
-}
+});
+
 const StyledInputContainer = styled.div`
   display: flex;
   justify-content: space-evenly;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import styled from "styled-components";
 
 type PropsType = {
@@ -6,17 +6,21 @@ type PropsType = {
     changeStatus: (isDone: boolean) => void
 }
 
-export const Checkbox = (props: PropsType) => (
-    <CheckboxContainer>
-        <HiddenCheckbox checked={props.isDone}
-                        onChange={(e)=>props.changeStatus(e.currentTarget.checked)} />
-        <StyledCheckbox checked={props.isDone}>
-            <Icon viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-            </Icon>
-        </StyledCheckbox>
-    </CheckboxContainer>
-)
+export const Checkbox = React.memo( ({isDone, changeStatus}: PropsType) => {
+    console.log('checkbox rendered')
+    const onChangeHandler =(e: ChangeEvent<HTMLInputElement>)=>changeStatus(e.currentTarget.checked);
+    return (
+        <CheckboxContainer>
+            <HiddenCheckbox checked={isDone}
+                            onChange={onChangeHandler} />
+            <StyledCheckbox checked={isDone}>
+                <Icon viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12" />
+                </Icon>
+            </StyledCheckbox>
+        </CheckboxContainer>
+    )
+} )
 
 const HiddenCheckbox = styled.input.attrs({type: 'checkbox'})`
   border: 0;
@@ -46,6 +50,7 @@ const StyledCheckbox = styled.div<{checked : boolean}>`
   ${HiddenCheckbox}:focus + & {box-shadow: 0 0 0 3px pink;}
   ${Icon} { visibility: ${props => props.checked ? 'visible' : 'hidden'}
 `
+
 const CheckboxContainer = styled.div`
   display: inline-block;
   vertical-align: middle;

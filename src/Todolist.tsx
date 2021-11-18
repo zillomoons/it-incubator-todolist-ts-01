@@ -1,13 +1,12 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {AddItemInput} from "./components/AddItemInput";
-import {FilterValuesType} from "./state/todoListReducer";
+import {EditTodoTitleAC, FilterValuesType, RemoveTodoListAC} from "./state/todoListReducer";
 import {Task} from "./components/Task";
 import {TodoTitle} from "./components/TodoTitle";
 import {FilterBlock} from "./components/FilterBlock";
 import styled from "styled-components";
-import {AddTaskAC, ChangeTaskStatusAC, EditTaskTitleAC, RemoveTaskAC, TaskStateType} from "./state/tasksReducer";
-import {useDispatch, useSelector} from "react-redux";
-import {rootReducerType} from "./store/store";
+import {AddTaskAC} from "./state/tasksReducer";
+import {useDispatch} from "react-redux";
 
 export type TaskType = {
     id: string
@@ -15,55 +14,47 @@ export type TaskType = {
     isDone: boolean
 }
 type ToDoListPropsType = {
+    tasks: TaskType[]
     todoID: string
     title: string
     filter: FilterValuesType
-    removeTodoList: () => void
-    editTodoTitle: (title: string) => void
 }
 
-export const Todolist = ({
-                             title, todoID, filter, editTodoTitle, removeTodoList
-                         }: ToDoListPropsType) => {
+export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListPropsType) => {
 
-    const tasks = useSelector<rootReducerType, TaskStateType>(state => state.tasks);
+    console.log(`Todolist ${title} was called`);
+
     const dispatch = useDispatch();
-
-    let tasksForToDoList = tasks[todoID];
+    let tasksForToDoList = tasks;
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => !t.isDone)
     }
     if (filter === 'completed') {
         tasksForToDoList = tasksForToDoList.filter(t => t.isDone)
     }
-    const removeTask = (taskID: string) => {
-        dispatch(RemoveTaskAC(todoID, taskID));
-    }
-    const addTask = (title: string) => {
+    const removeTodoList = useCallback(() => {
+        dispatch(RemoveTodoListAC(todoID));
+    }, [dispatch, todoID])
+    const editTodoTitle = useCallback((title: string) => {
+        dispatch(EditTodoTitleAC(todoID, title));
+    }, [dispatch, todoID])
+    const addTask = useCallback((title: string) => {
         dispatch(AddTaskAC(todoID, title));
-    }
-    const editTaskTitle = (taskID: string, title: string) => {
-        dispatch(EditTaskTitleAC(todoID, taskID, title));
-    }
-    const changeStatus = (taskID: string, isDone: boolean) => {
-        dispatch(ChangeTaskStatusAC(todoID, taskID, isDone));
-    }
-    const mappedTasks = tasksForToDoList.map((t) => {
-        return <Task key={t.id}
-                     title={t.title}
-                     isDone={t.isDone}
-                     changeStatus={(isDone) => changeStatus(t.id, isDone)}
-                     editTaskTitle={(title) => editTaskTitle(t.id, title)}
-                     removeTask={() => removeTask(t.id)}/>
+    }, [dispatch, todoID])
 
-    })
-    return <StyledTodolist>
-        <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
-        <AddItemInput addNewItemTitle={addTask}/>
-        {mappedTasks}
-        <FilterBlock filter={filter} todoID={todoID}/>
-    </StyledTodolist>
-}
+    const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID}
+                                                          taskID={t.id}
+                                                          title={t.title}
+                                                          isDone={t.isDone}/>)
+    return (
+        <StyledTodolist>
+            <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
+            <AddItemInput addNewItemTitle={addTask}/>
+            {mappedTasks}
+            <FilterBlock filter={filter} todoID={todoID}/>
+        </StyledTodolist>
+    )
+})
 
 const StyledTodolist = styled.div`
   min-width: 320px;
