@@ -8,7 +8,6 @@ type PropsType = {
 }
 
 export const SpanWithEditMode = React.memo(({title, editTitle}: PropsType) => {
-    console.log('spanWithEditMode was called: '+title)
     const [editMode, setEditMode] = useState(false)
     const [value, setValue] = useState('')
     const activateEditMode = () => {

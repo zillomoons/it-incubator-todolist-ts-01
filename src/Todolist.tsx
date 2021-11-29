@@ -1,8 +1,8 @@
 import React, {useCallback} from "react";
-import {AddItemInput} from "./components/AddItemInput";
+import {AddItemInput} from "./components/addItemInput/AddItemInput";
 import {EditTodoTitleAC, FilterValuesType, RemoveTodoListAC} from "./state/todoListReducer";
-import {Task} from "./components/Task";
-import {TodoTitle} from "./components/TodoTitle";
+import {Task} from "./components/task/Task";
+import {TodoTitle} from "./components/todoListTitle/TodoTitle";
 import {FilterBlock} from "./components/FilterBlock";
 import styled from "styled-components";
 import {AddTaskAC} from "./state/tasksReducer";
@@ -21,9 +21,6 @@ type ToDoListPropsType = {
 }
 
 export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListPropsType) => {
-
-    console.log(`Todolist ${title} was called`);
-
     const dispatch = useDispatch();
     let tasksForToDoList = tasks;
     if (filter === 'active') {

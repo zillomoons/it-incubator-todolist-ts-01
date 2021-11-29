@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import styled from "styled-components";
-import {StyledIconButton} from "./DeleteButton";
+import {StyledIconButton} from "../DeleteButton";
 import {IoAddCircleOutline} from "react-icons/all";
 
 type PropsType = {
@@ -8,7 +8,6 @@ type PropsType = {
 }
 
 export const AddItemInput = React.memo(({addNewItemTitle}: PropsType) => {
-    console.log('AddItemInput was called')
     const [newTitle, setNewTitle] = useState('');
     const [error, setError] = useState<boolean>(false);
 
@@ -43,7 +42,7 @@ export const AddItemInput = React.memo(({addNewItemTitle}: PropsType) => {
 
 const StyledInputContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-start;
   margin: 10px 0;
 `

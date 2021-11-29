@@ -1,6 +1,6 @@
-import {SpanWithEditMode} from "./SpanWithEditMode";
+import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
 import React from "react";
-import {DeleteButton} from "./DeleteButton";
+import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
 
 type PropsType = {

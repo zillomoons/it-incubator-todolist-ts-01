@@ -6,15 +6,13 @@ import {
 } from "./state/todoListReducer";
 import {Header} from "./components/Header";
 import {useSelector} from "react-redux";
-import {rootReducerType} from "./store/store";
+import {AppRootStateType} from "./store/store";
 import {TaskStateType} from "./state/tasksReducer";
 
 
-const App = () => {
-    console.log('App was called');
-
-    const todoLists = useSelector<rootReducerType, TodoListType[]>(state => state.todoLists);
-    const tasks = useSelector<rootReducerType, TaskStateType>(state => state.tasks);
+const App =() => {
+    const todoLists = useSelector<AppRootStateType, TodoListType[]>(state => state.todoLists);
+    const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks);
     const mappedTodoLists = todoLists.map(todo => {
 
         return <Todolist key={todo.id}
@@ -31,6 +29,6 @@ const App = () => {
             </div>
         </div>
     );
-}
+};
 
 export default App;

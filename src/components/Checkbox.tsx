@@ -7,7 +7,6 @@ type PropsType = {
 }
 
 export const Checkbox = React.memo( ({isDone, changeStatus}: PropsType) => {
-    console.log('checkbox rendered')
     const onChangeHandler =(e: ChangeEvent<HTMLInputElement>)=>changeStatus(e.currentTarget.checked);
     return (
         <CheckboxContainer>

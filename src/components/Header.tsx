@@ -1,5 +1,5 @@
 import React from "react"
-import {AddItemInput} from "./AddItemInput";
+import {AddItemInput} from "./addItemInput/AddItemInput";
 import styled from "styled-components";
 import {AddNewTodoAC} from "../state/todoListReducer";
 import {useDispatch} from "react-redux";

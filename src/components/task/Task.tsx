@@ -1,9 +1,9 @@
 import React, {useCallback} from "react"
-import {SpanWithEditMode} from "./SpanWithEditMode";
-import {Checkbox} from "./Checkbox";
-import {DeleteButton} from "./DeleteButton";
+import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
+import {Checkbox} from "../Checkbox";
+import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
-import {ChangeTaskStatusAC, EditTaskTitleAC, RemoveTaskAC} from "../state/tasksReducer";
+import {ChangeTaskStatusAC, EditTaskTitleAC, RemoveTaskAC} from "../../state/tasksReducer";
 import {useDispatch} from "react-redux";
 
 type PropsType = {
