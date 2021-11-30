@@ -19,5 +19,5 @@ export const TodoTitle = React.memo(({title, editTodoTitle, removeTodoList}: Pro
 const TodoTitleStyled = styled.h3`
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: flex-start;
 `

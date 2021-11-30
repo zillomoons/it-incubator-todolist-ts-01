@@ -2,10 +2,8 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import {action} from "@storybook/addon-actions";
 import {Task} from "./Task";
-// import {ReduxStoreProviderDecorator} from "../../stories/decorators/ReduxStoreProviderDecorator";
 import {store} from "../../store/store";
 import {Provider, useDispatch} from "react-redux";
-
 
 export default {
     title: 'Todolist/Task',
@@ -16,10 +14,9 @@ export default {
                 <Story />
             </Provider>
         )
-    ]
+    ],
 } as ComponentMeta<typeof Task>;
 
-// const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
 
 export const TaskIsDoneExample = (args: any) => {
     const dispatch = useDispatch();
@@ -27,9 +24,7 @@ export const TaskIsDoneExample = (args: any) => {
 }
 TaskIsDoneExample.args = {
     todoID: 'todolistId1',
-    taskID: '1',
-    title: 'JS',
-    isDone: true,
+    task: {id: '1', title: 'JS', isDone: true},
 }
 export const TaskIsNotDoneExample = (args: any) => {
     const dispatch = useDispatch();
@@ -37,7 +32,5 @@ export const TaskIsNotDoneExample = (args: any) => {
 }
 TaskIsNotDoneExample.args = {
     todoID: 'todolistId1',
-    taskID: '1',
-    title: 'JS',
-    isDone: false,
+    task: {id: '1', title: 'JS', isDone: false},
 }

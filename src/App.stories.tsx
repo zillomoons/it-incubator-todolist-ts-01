@@ -1,17 +1,24 @@
 import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import {ComponentMeta, Story} from '@storybook/react';
 import {action} from "@storybook/addon-actions";
 import App from "./App";
-import {ReduxStoreProviderDecorator} from "./stories/decorators/ReduxStoreProviderDecorator";
+import {Provider, useDispatch} from "react-redux";
+import {storyBookStore} from "./stories/decorators/ReduxStoreProviderDecorator";
 
 
 export default {
     title: 'Todolist/App',
     component: App,
-    decorators: [ReduxStoreProviderDecorator]
+    decorators: [
+        Story => (
+            <Provider store={storyBookStore}>
+                <Story />
+            </Provider>
+        )
+    ]
 } as ComponentMeta<typeof App>;
 
-const Template: ComponentStory<typeof App> = () => <App />;
-
-export const AppExample = Template.bind({});
-
+export const AppExample = () =>{
+    const dispatch = useDispatch();
+    return <App />
+}

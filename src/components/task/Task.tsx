@@ -3,35 +3,33 @@ import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
 import {Checkbox} from "../Checkbox";
 import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
-import {ChangeTaskStatusAC, EditTaskTitleAC, RemoveTaskAC} from "../../state/tasksReducer";
+import {ChangeTaskStatusAC, EditTaskTitleAC, RemoveTaskAC, TaskType} from "../../state/tasksReducer";
 import {useDispatch} from "react-redux";
 
 type PropsType = {
     todoID: string
-    taskID: string
-    title: string
-    isDone: boolean
+    task: TaskType
 }
 
-export const Task = React.memo(({title, taskID, isDone, todoID}: PropsType) => {
+export const Task = React.memo(({task, todoID}: PropsType) => {
     const dispatch = useDispatch();
     const editTaskTitle = useCallback((title: string) => {
-        dispatch(EditTaskTitleAC(todoID, taskID, title));
-    }, [dispatch, todoID, taskID])
+        dispatch(EditTaskTitleAC(todoID, task.id, title));
+    }, [dispatch, todoID, task.id])
     const changeStatus = useCallback((isDone: boolean) => {
-        dispatch(ChangeTaskStatusAC(todoID, taskID, isDone));
-    }, [dispatch, todoID, taskID])
+        dispatch(ChangeTaskStatusAC(todoID, task.id, isDone));
+    }, [dispatch, todoID, task.id])
     const removeTask = useCallback(() => {
-        dispatch(RemoveTaskAC(todoID, taskID));
-    }, [dispatch, todoID, taskID])
+        dispatch(RemoveTaskAC(todoID, task.id));
+    }, [dispatch, todoID, task.id])
 
-    const TaskStyle = `${'taskStyle'} ${isDone ? 'is-done' : ''}`
+    const TaskStyle = `${'taskStyle'} ${task.isDone ? 'is-done' : ''}`
     return (
         <TaskContainer className={TaskStyle}>
             <label>
-                <Checkbox isDone={isDone} changeStatus={changeStatus}/>
+                <Checkbox isDone={task.isDone} changeStatus={changeStatus}/>
             </label>
-            <SpanWithEditMode title={title} editTitle={editTaskTitle}/>
+            <SpanWithEditMode title={task.title} editTitle={editTaskTitle}/>
             <DeleteButton callback={removeTask}/>
         </TaskContainer>
     )

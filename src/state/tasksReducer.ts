@@ -1,7 +1,11 @@
 import {v1} from "uuid";
 import {AddNewTodoAC, RemoveTodoListAC} from "./todoListReducer";
-import {TaskType} from "../Todolist";
 
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
 export type TaskStateType = { [key: string]: TaskType[] }
 type ActionsType = ReturnType<typeof RemoveTaskAC> | ReturnType<typeof AddTaskAC>
     | ReturnType<typeof EditTaskTitleAC> | ReturnType<typeof ChangeTaskStatusAC>

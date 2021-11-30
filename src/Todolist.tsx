@@ -5,14 +5,10 @@ import {Task} from "./components/task/Task";
 import {TodoTitle} from "./components/todoListTitle/TodoTitle";
 import {FilterBlock} from "./components/FilterBlock";
 import styled from "styled-components";
-import {AddTaskAC} from "./state/tasksReducer";
+import {AddTaskAC, TaskType} from "./state/tasksReducer";
 import {useDispatch} from "react-redux";
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+
 type ToDoListPropsType = {
     tasks: TaskType[]
     todoID: string
@@ -39,10 +35,7 @@ export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListProp
         dispatch(AddTaskAC(todoID, title));
     }, [dispatch, todoID])
 
-    const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID}
-                                                          taskID={t.id}
-                                                          title={t.title}
-                                                          isDone={t.isDone}/>)
+    const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (
         <StyledTodolist>
             <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
