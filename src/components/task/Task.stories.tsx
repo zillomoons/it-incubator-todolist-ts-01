@@ -1,36 +1,36 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import {action} from "@storybook/addon-actions";
 import {Task} from "./Task";
-import {store} from "../../store/store";
-import {Provider, useDispatch} from "react-redux";
+import {ReduxStoreProviderDecorator} from "../../stories/decorators/ReduxStoreProviderDecorator";
+import {v1} from "uuid";
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "../../store/store";
+import {TaskType} from "../../state/tasksReducer";
 
 export default {
     title: 'Todolist/Task',
     component: Task,
-    decorators: [
-        Story => (
-            <Provider store={store}>
-                <Story />
-            </Provider>
-        )
-    ],
+    decorators: [ReduxStoreProviderDecorator],
 } as ComponentMeta<typeof Task>;
 
+const UsingReduxComponent = () => {
+    const task = useSelector<AppRootStateType, TaskType>(state => state.tasks['todolistId1'][0])
+    return <Task todoID='todolistId1' task={task} />
+}
 
-export const TaskIsDoneExample = (args: any) => {
-    const dispatch = useDispatch();
-    return <Task {...args}/>
-}
-TaskIsDoneExample.args = {
-    todoID: 'todolistId1',
-    task: {id: '1', title: 'JS', isDone: true},
-}
-export const TaskIsNotDoneExample = (args: any) => {
-    const dispatch = useDispatch();
-    return <Task {...args}/>
-}
-TaskIsNotDoneExample.args = {
-    todoID: 'todolistId1',
-    task: {id: '1', title: 'JS', isDone: false},
-}
+const Template: ComponentStory<typeof UsingReduxComponent> = (args) => <UsingReduxComponent />;
+
+export const TaskStory = Template.bind({});
+TaskStory.args = {};
+
+// const Template: ComponentStory<typeof Task> = (args) => <Task {...args} />;
+// export const TaskIsNotDoneStory = Template.bind({});
+// TaskIsNotDoneStory.args = {
+//     todoID: "todolistId1",
+//     task: {id: v1(), title: "React", isDone: false},
+// };
+// export const TaskIsDoneStory = Template.bind({});
+// TaskIsDoneStory.args = {
+//     todoID: "todolistId1",
+//     task: {id: v1(), title: "JS", isDone: true},
+// };

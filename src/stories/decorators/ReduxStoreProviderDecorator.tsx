@@ -1,5 +1,5 @@
 import React from 'react';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
 import {tasksReducer} from "../../state/tasksReducer";
 import {todoListReducer} from "../../state/todoListReducer";
@@ -32,7 +32,6 @@ const initialGlobalState = {
 
 export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType)
 
-export const ReduxStoreProviderDecorator = (storyFn: any) => {
-    const dispatch = useDispatch();
-    return <Provider store={storyBookStore}>{storyFn()}</Provider>
-}
+export const ReduxStoreProviderDecorator = (storyFn: ()=>React.ReactNode) => <Provider store={storyBookStore}>
+    {storyFn()}
+</Provider>
