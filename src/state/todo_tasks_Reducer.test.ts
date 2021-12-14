@@ -1,10 +1,17 @@
 import {tasksReducer, TaskStateType} from "./tasksReducer";
-import {AddNewTodoAC, RemoveTodoListAC, todoListReducer, TodoListType} from "./todoListReducer";
+import {
+    AddNewTodoAC,
+    RemoveTodoListAC,
+    TodolistEntityType,
+    todoListId_1,
+    todoListId_2,
+    todoListReducer
+} from "./todoListReducer";
 import {v1} from "uuid";
 
 test('ids should be equal', ()=> {
     const startTasksState: TaskStateType = {};
-    const startTodoListsState: TodoListType[] = [];
+    const startTodoListsState: TodolistEntityType[] = [];
     // let newID = v1()
     const action = AddNewTodoAC('new TodoList')
     const endTasksState = tasksReducer(startTasksState, action)
@@ -19,18 +26,47 @@ test('ids should be equal', ()=> {
 })
 test('property with todoID should be deleted from Tasks state', ()=>{
     const startState: TaskStateType = {
-        'todoListID1' : [
-            {id: '1', title: 'HTML', isDone: true},
-            {id: '2', title: 'CSS', isDone: true},
-            {id: '3', title: 'JS', isDone: false},
+        [todoListId_1]: [
+            {
+                id: v1(),
+                title: "HTML&CSS",
+                description: 'string',
+                status: 1,
+                priority: 1,
+                startDate: '',
+                deadline: '',
+                todoListId: todoListId_1,
+                order: 1,
+                addedDate: ''
+            },
+            {
+                id: v1(),
+                title: "JS",
+                description: 'string',
+                status: 1,
+                priority: 1,
+                startDate: '',
+                deadline: '',
+                todoListId: todoListId_1,
+                order: 1,
+                addedDate: ''
+            },
         ],
-        'todoListID2' : [
-            {id: '1', title: 'Bread', isDone: true},
-            {id: '2', title: 'Milk', isDone: false},
-            {id: '3', title: 'Meat', isDone: false},
-        ],
+        [todoListId_2]: [
+            {
+                id: v1(),
+                title: "Milk",
+                description: 'string',
+                status: 1,
+                priority: 1,
+                startDate: '',
+                deadline: '',
+                todoListId: todoListId_2,
+                order: 1,
+                addedDate: ''},
+        ]
     }
-    const action = RemoveTodoListAC('todoListID2');
+    const action = RemoveTodoListAC(todoListId_2);
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)

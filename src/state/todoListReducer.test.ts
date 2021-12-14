@@ -1,18 +1,17 @@
 import {
     AddNewTodoAC,
     ChangeFilterAC,
-    EditTodoTitleAC,
+    EditTodoTitleAC, TodolistEntityType,
     todoListId_1,
     todoListId_2,
-    todoListReducer, TodoListType
+    todoListReducer
 } from "./todoListReducer";
-import {v1} from "uuid";
 
-let state: TodoListType[];
+let state: TodolistEntityType[];
 beforeEach(()=> {
     state = [
-        {id: todoListId_1, title: 'What to learn', filter: 'all'},
-        {id: todoListId_2, title: 'What to buy', filter: 'all'},
+        {id: todoListId_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+        {id: todoListId_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
     ]
 })
 
