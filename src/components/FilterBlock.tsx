@@ -1,6 +1,6 @@
 import React, {useCallback} from "react"
 import {MyButton} from "./Button";
-import {changeFilterAC, FilterValuesType} from "../state/todoListReducer";
+import {changeFilterAC, FilterValuesType} from "../state/todolists-reducer";
 import {useDispatch} from "react-redux";
 
 type PropsType = {

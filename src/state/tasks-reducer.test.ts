@@ -4,9 +4,9 @@ import {
     removeTaskAC,
     tasksReducer,
     TaskStateType
-} from "./tasksReducer";
-import {todoListId_1, todoListId_2} from "./todoListReducer";
+} from "./tasks-reducer";
 import {TaskStatuses} from "../api/tasks-api";
+import {todoListId_1, todoListId_2} from "./todolists-reducer.test";
 
 let startState: TaskStateType;
 beforeEach(()=>{

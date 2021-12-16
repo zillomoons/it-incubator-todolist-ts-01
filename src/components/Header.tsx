@@ -1,7 +1,7 @@
 import React, {useCallback} from "react"
 import {AddItemInput} from "./addItemInput/AddItemInput";
 import styled from "styled-components";
-import {createTodolist} from "../state/todoListReducer";
+import {createTodolist} from "../state/todolists-reducer";
 import {useDispatch} from "react-redux";
 
 export const Header = React.memo(() => {

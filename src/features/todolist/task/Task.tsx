@@ -1,11 +1,11 @@
 import React, {useCallback} from "react"
-import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
-import {Checkbox} from "../Checkbox";
-import {DeleteButton} from "../DeleteButton";
+import {SpanWithEditMode} from "../../../components/spanWithEditMode/SpanWithEditMode";
+import {Checkbox} from "../../../components/Checkbox";
+import {DeleteButton} from "../../../components/DeleteButton";
 import styled from "styled-components";
-import {deleteTask, updateTask} from "../../state/tasksReducer";
+import {deleteTask, updateTask} from "../../../state/tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatuses, TaskType} from "../../api/tasks-api";
+import {TaskStatuses, TaskType} from "../../../api/tasks-api";
 
 type PropsType = {
     todoID: string

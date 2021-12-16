@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {Todolist} from "./Todolist";
-import {Header} from "./components/Header";
+import {Todolist} from "../features/todolist/Todolist";
+import {Header} from "../components/Header";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./store/store";
-import {TaskStateType} from "./state/tasksReducer";
-import {getTodolists, TodolistEntityType} from "./state/todoListReducer";
+import {AppRootStateType} from "../store/store";
+import {TaskStateType} from "../state/tasks-reducer";
+import {getTodolists, TodolistEntityType} from "../state/todolists-reducer";
 
 
 const App =() => {
