@@ -3,7 +3,7 @@ import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
 import {Checkbox} from "../Checkbox";
 import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
-import {changeTaskStatusAC, editTaskTitleAC, removeTaskAC} from "../../state/tasksReducer";
+import {deleteTask, updateTask} from "../../state/tasksReducer";
 import {useDispatch} from "react-redux";
 import {TaskStatuses, TaskType} from "../../api/tasks-api";
 
@@ -15,13 +15,13 @@ type PropsType = {
 export const Task = React.memo(({task, todoID}: PropsType) => {
     const dispatch = useDispatch();
     const editTaskTitle = useCallback((title: string) => {
-        dispatch(editTaskTitleAC(todoID, task.id, title));
+        dispatch(updateTask(todoID, task.id, {title}));
     }, [dispatch, todoID, task.id])
     const changeStatus = useCallback((status: TaskStatuses) => {
-        dispatch(changeTaskStatusAC(todoID, task.id, status));
+        dispatch(updateTask(todoID, task.id, { status }));
     }, [dispatch, todoID, task.id])
     const removeTask = useCallback(() => {
-        dispatch(removeTaskAC(todoID, task.id));
+        dispatch(deleteTask(todoID, task.id));
     }, [dispatch, todoID, task.id])
 
     const TaskStyle = `${'taskStyle'} ${task.status ? TaskStatuses.Completed : ''}`

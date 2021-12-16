@@ -30,8 +30,8 @@ export type TaskType = {
 export type UpdateTaskType = {
     title: string
     description: string
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TaskPriorities
     startDate: string | null
     deadline: string | null
 }
@@ -56,13 +56,12 @@ const instance = axios.create({
 })
 export const tasksAPI = {
     createTask(todoID: string, title: string){
-        return instance.post<ResponseType<TaskType>>(`${todoID}/tasks`, {title});
+        return instance.post<ResponseType<{item: TaskType}>>(`${todoID}/tasks`, {title});
     },
     getTasks(todoID: string){
         return instance.get<GetTaskResType>(`${todoID}/tasks`);
     },
     updateTask(todoID: string, taskID: string, model: UpdateTaskType){
-
         return instance.put<ResponseType<TaskType>>(`${todoID}/tasks/${taskID}`, model);
     },
     deleteTask(todoID: string, taskID: string){

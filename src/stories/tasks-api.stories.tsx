@@ -1,19 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {tasksAPI} from "../api/tasks-api";
-import axios from "axios";
 
 export default {
     title: 'API/tasks',
 }
-
 
 export const GetTasks = () => {
     const [state, setState] = useState<any>(null);
     const [todoID, setTodoID] = useState('');
     const getTasks = () => {
         tasksAPI.getTasks(todoID).then(res => {
-            let tasks = res.data.items.map(t=> `TaskID: ${t.id}. Title: ${t.title}`)
-            setState(tasks);
+            setState(res.data)
+
         })
     }
 
@@ -34,8 +32,6 @@ export const CreateTask = () => {
     const createTask = () => {
         tasksAPI.createTask(todoID, taskTitle).then(res => setState(res.data.data));
     }
-    useEffect(() => {
-    }, [])
     return <div>
         <div>
             <input placeholder='todoID' value={todoID} onChange={e => setTodoID(e.target.value)}/>

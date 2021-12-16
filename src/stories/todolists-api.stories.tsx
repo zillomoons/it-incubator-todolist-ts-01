@@ -5,13 +5,12 @@ export default {
     title: 'API/todolist'
 }
 
-const deleteTodoID = '1cbf3bf8-5df3-4361-b76b-ab03102ca398';
-const updateTodoID = 'da3264ab-7cbf-4c22-b949-4e96414c7f0f';
 
 export const GetTodolists = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        todolistsAPI.getTodolists().then(res => setState(res.data.map(todo => `TodoID: ${todo.id}. Title: ${todo.title}`)));
+
+        todolistsAPI.getTodolists().then(res => setState(res.data));
     }, [])
 
     return <div> {JSON.stringify(state)}</div>
@@ -27,7 +26,7 @@ export const CreateTodolist = () => {
         todolistsAPI.createTodolist(todoTitle)
             .then(res => {
                 if (res.data.resultCode === 0) {
-                    setState(res.data.data.item.title)
+                    setState(res.data)
                 }
             });
     }

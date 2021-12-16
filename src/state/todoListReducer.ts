@@ -1,5 +1,7 @@
 import {v1} from "uuid";
-import {TodolistType} from "../api/todolists-api";
+import {todolistsAPI, TodolistType} from "../api/todolists-api";
+import {AppDispatch} from "../store/store";
+import {ACTIONS_TYPE} from "./actions";
 
 export const todoListId_1 = v1();
 export const todoListId_2 = v1();
@@ -11,43 +13,67 @@ export type TodolistEntityType = TodolistType & {
 }
 
 const initialState: TodolistEntityType[] = []
-type ActionsType = ReturnType<typeof RemoveTodoListAC>
-    | ReturnType<typeof EditTodoTitleAC>
-    | ReturnType<typeof AddNewTodoAC>
-    | ReturnType<typeof ChangeFilterAC>
+type ActionsType = ReturnType<typeof removeTodoListAC>
+    | ReturnType<typeof editTodoTitleAC>
+    | ReturnType<typeof addNewTodoAC>
+    | ReturnType<typeof changeFilterAC>
+    | ReturnType<typeof setTodolistsAC>
 
 export const todoListReducer = (state = initialState, action: ActionsType): TodolistEntityType[] => {
     switch (action.type) {
-        case "REMOVE-TODOLIST":
+        case ACTIONS_TYPE.REMOVE_TODOLIST:
             return state.filter(todo => todo.id !== action.todoID)
-        case "EDIT-TODO-TITLE":
+        case ACTIONS_TYPE.EDIT_TODOLIST:
             return state.map(todo => todo.id === action.todoID
                 ? {...todo, title: action.title} : todo)
-        case "ADD-NEW-TODO":
-            return [{
-                id: action.todoID,
-                title: action.title,
-                filter: 'all',
-                addedDate: '',
-                order: 0
-            }, ...state]
-        case "CHANGE-FILTER":
+        case ACTIONS_TYPE.ADD_NEW_TODOLIST:
+            return [{...action.todo, filter: 'all'}, ...state]
+        case ACTIONS_TYPE.CHANGE_FILTER:
             return state.map(todo => todo.id === action.todoID
-                ? {...todo, filter: action.value} : todo)
+                ? {...todo, filter: action.value} : todo);
+        case ACTIONS_TYPE.SET_TODOLISTS:
+            return action.todolists.map(todo=> ({...todo, filter : 'all' as FilterValuesType}) )
         default:
             return state;
     }
 }
+// Action creators
+export const removeTodoListAC = (todoID: string) => {
+    return {type: ACTIONS_TYPE.REMOVE_TODOLIST, todoID} as const;
+}
+export const editTodoTitleAC = (todoID: string, title: string) => {
+    return {type: ACTIONS_TYPE.EDIT_TODOLIST, todoID, title} as const;
+}
+export const addNewTodoAC = (todo: TodolistType) => {
+    return {type: ACTIONS_TYPE.ADD_NEW_TODOLIST, todo} as const;
+}
+export const changeFilterAC = (todoID: string, value: FilterValuesType,) => {
+    return {type: ACTIONS_TYPE.CHANGE_FILTER, todoID, value} as const;
+}
+export const setTodolistsAC = (todolists: TodolistType[]) => {
+    return {type: ACTIONS_TYPE.SET_TODOLISTS, todolists} as const;
+}
 
-export const RemoveTodoListAC = (todoID: string) => {
-    return {type: 'REMOVE-TODOLIST', todoID} as const;
+// Thunk creators
+export const getTodolists = () => async (dispatch: AppDispatch) => {
+    const { data } = await todolistsAPI.getTodolists();
+    dispatch(setTodolistsAC(data));
 }
-export const EditTodoTitleAC = (todoID: string, title: string) => {
-    return {type: 'EDIT-TODO-TITLE', todoID, title} as const;
+export const createTodolist = (title: string) => async (dispatch: AppDispatch) => {
+    const { data } = await todolistsAPI.createTodolist(title);
+    if (data.resultCode === 0){
+        dispatch(addNewTodoAC(data.data.item));
+    }
 }
-export const AddNewTodoAC = (title: string) => {
-    return {type: 'ADD-NEW-TODO', todoID: v1(), title} as const;
+export const deleteTodolist = (todoID: string) => async (dispatch: AppDispatch) => {
+    const { data } = await todolistsAPI.deleteTodolist(todoID);
+    if (data.resultCode === 0){
+        dispatch(removeTodoListAC(todoID));
+    }
 }
-export const ChangeFilterAC = (todoID: string, value: FilterValuesType,) => {
-    return {type: 'CHANGE-FILTER', todoID, value} as const;
+export const updateTodoTitle = (todoID: string, title: string) => async (dispatch: AppDispatch) => {
+    const { data } = await todolistsAPI.updateTodolist(todoID, title);
+    if (data.resultCode === 0){
+        dispatch(editTodoTitleAC(todoID, title));
+    }
 }

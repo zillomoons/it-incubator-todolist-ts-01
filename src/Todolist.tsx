@@ -1,11 +1,11 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {AddItemInput} from "./components/addItemInput/AddItemInput";
-import {EditTodoTitleAC, FilterValuesType, RemoveTodoListAC} from "./state/todoListReducer";
+import {deleteTodolist, FilterValuesType, updateTodoTitle} from "./state/todoListReducer";
 import {Task} from "./components/task/Task";
 import {TodoTitle} from "./components/todoListTitle/TodoTitle";
 import {FilterBlock} from "./components/FilterBlock";
 import styled from "styled-components";
-import {addTaskAC} from "./state/tasksReducer";
+import { createTask, getTasks} from "./state/tasksReducer";
 import {useDispatch} from "react-redux";
 import {TaskStatuses, TaskType} from "./api/tasks-api";
 
@@ -20,6 +20,11 @@ type ToDoListPropsType = {
 export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListPropsType) => {
     const dispatch = useDispatch();
     let tasksForToDoList = tasks;
+
+    useEffect(()=> {
+        dispatch(getTasks(todoID));
+    }, [todoID, dispatch])
+
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.New)
     }
@@ -27,13 +32,13 @@ export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListProp
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.Completed)
     }
     const removeTodoList = useCallback(() => {
-        dispatch(RemoveTodoListAC(todoID));
+        dispatch(deleteTodolist(todoID));
     }, [dispatch, todoID])
     const editTodoTitle = useCallback((title: string) => {
-        dispatch(EditTodoTitleAC(todoID, title));
+        dispatch(updateTodoTitle(todoID, title));
     }, [dispatch, todoID])
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskAC(todoID, title));
+        dispatch(createTask(todoID, title));
     }, [dispatch, todoID])
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)

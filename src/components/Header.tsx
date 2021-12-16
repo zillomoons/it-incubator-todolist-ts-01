@@ -1,14 +1,14 @@
-import React from "react"
+import React, {useCallback} from "react"
 import {AddItemInput} from "./addItemInput/AddItemInput";
 import styled from "styled-components";
-import {AddNewTodoAC} from "../state/todoListReducer";
+import {createTodolist} from "../state/todoListReducer";
 import {useDispatch} from "react-redux";
 
 export const Header = React.memo(() => {
     let dispatch = useDispatch();
-    const addNewTodoList = (title: string) => {
-        dispatch(AddNewTodoAC(title));
-    };
+    const addNewTodoList = useCallback((title: string) => {
+        dispatch(createTodolist(title));
+    }, [dispatch]) ;
     return (
         <StyledHeaderContainer>
             <h3 style={{marginLeft: '15px'}}>Todo App</h3>
