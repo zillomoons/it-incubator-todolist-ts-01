@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from 'react'
-import {todolistsAPI} from "../api/todolists-api";
+import {todolistsAPI} from "./todolists-api";
 
 export default {
     title: 'API/todolist'

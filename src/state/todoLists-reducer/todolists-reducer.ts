@@ -1,5 +1,5 @@
-import {todolistsAPI, TodolistType} from "../api/todolists-api";
-import {ACTIONS_TYPE} from "./actions";
+import {todolistsAPI, TodolistType} from "../../api/todolists-api";
+import {ACTIONS_TYPE} from "../actions";
 import {Dispatch} from "redux";
 
 const initialState: TodolistEntityType[] = []

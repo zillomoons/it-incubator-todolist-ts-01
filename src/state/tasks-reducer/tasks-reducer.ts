@@ -1,7 +1,7 @@
-import {addNewTodoAC, removeTodoListAC, setTodolistsAC} from "./todolists-reducer";
-import {TaskPriorities, tasksAPI, TaskStatuses, TaskType} from "../api/tasks-api";
-import {AppRootStateType} from "../store/store";
-import {ACTIONS_TYPE} from "./actions";
+import {addNewTodoAC, removeTodoListAC, setTodolistsAC} from "../todoLists-reducer/todolists-reducer";
+import {TaskPriorities, tasksAPI, TaskStatuses, TaskType} from "../../api/tasks-api";
+import {AppRootStateType} from "../../store/store";
+import {ACTIONS_TYPE} from "../actions";
 import {Dispatch} from "redux";
 
 

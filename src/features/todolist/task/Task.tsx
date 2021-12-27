@@ -3,7 +3,7 @@ import {SpanWithEditMode} from "../../../components/spanWithEditMode/SpanWithEdi
 import {Checkbox} from "../../../components/Checkbox";
 import {DeleteButton} from "../../../components/DeleteButton";
 import styled from "styled-components";
-import {deleteTask, updateTask} from "../../../state/tasks-reducer";
+import {deleteTask, updateTask} from "../../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {TaskStatuses, TaskType} from "../../../api/tasks-api";
 

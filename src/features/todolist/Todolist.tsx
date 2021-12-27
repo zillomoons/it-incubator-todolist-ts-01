@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect} from "react";
 import {AddItemInput} from "../../components/addItemInput/AddItemInput";
-import {deleteTodolist, FilterValuesType, updateTodoTitle} from "../../state/todolists-reducer";
+import {deleteTodolist, FilterValuesType, updateTodoTitle} from "../../state/todoLists-reducer/todolists-reducer";
 import {Task} from "./task/Task";
 import {TodoTitle} from "../../components/todoListTitle/TodoTitle";
 import {FilterBlock} from "../../components/FilterBlock";
 import styled from "styled-components";
-import { createTask, getTasks} from "../../state/tasks-reducer";
+import { createTask, getTasks} from "../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {TaskStatuses, TaskType} from "../../api/tasks-api";
 

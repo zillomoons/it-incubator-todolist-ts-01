@@ -5,8 +5,8 @@ import {
     tasksReducer,
     TaskStateType
 } from "./tasks-reducer";
-import {TaskStatuses} from "../api/tasks-api";
-import {todoListId_1, todoListId_2} from "./todolists-reducer.test";
+import {TaskStatuses} from "../../api/tasks-api";
+import {todoListId_1, todoListId_2} from "../todoLists-reducer/todolists-reducer.test";
 
 let startState: TaskStateType;
 beforeEach(()=>{

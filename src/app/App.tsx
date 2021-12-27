@@ -4,8 +4,8 @@ import {Todolist} from "../features/todolist/Todolist";
 import {Header} from "../components/Header";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
-import {TaskStateType} from "../state/tasks-reducer";
-import {getTodolists, TodolistEntityType} from "../state/todolists-reducer";
+import {TaskStateType} from "../state/tasks-reducer/tasks-reducer";
+import {getTodolists, TodolistEntityType} from "../state/todoLists-reducer/todolists-reducer";
 
 
 const App =() => {

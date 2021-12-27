@@ -1,16 +1,19 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {combineReducers, createStore} from 'redux';
-import {tasksReducer} from "../../state/tasks-reducer";
-import {todolistsReducer} from "../../state/todolists-reducer";
+import {applyMiddleware, combineReducers, createStore} from 'redux';
+import {tasksReducer} from "../../state/tasks-reducer/tasks-reducer";
+import {todolistsReducer} from "../../state/todoLists-reducer/todolists-reducer";
 import {v1} from 'uuid';
 import {AppRootStateType} from "../../store/store";
 import {TaskPriorities, TaskStatuses} from "../../api/tasks-api";
+import { appReducer } from '../../state/app-reducer/app-reducer';
+import thunkMiddleware from "redux-thunk";
 
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todoLists: todolistsReducer,
+    app: appReducer,
 })
 
 const initialGlobalState = {
@@ -60,10 +63,14 @@ const initialGlobalState = {
                 addedDate: ''},
 
         ],
+    },
+    app: {
+        error: null,
+        status: 'idle',
     }
 }
 
-export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType)
+export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType, applyMiddleware(thunkMiddleware))
 
 export const ReduxStoreProviderDecorator = (storyFn: ()=>React.ReactNode) => <Provider store={storyBookStore}>
     {storyFn()}

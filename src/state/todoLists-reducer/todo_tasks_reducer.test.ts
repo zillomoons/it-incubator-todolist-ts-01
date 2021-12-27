@@ -1,4 +1,4 @@
-import {tasksReducer, TaskStateType} from "./tasks-reducer";
+import {tasksReducer, TaskStateType} from "../tasks-reducer/tasks-reducer";
 import {
     addNewTodoAC,
     removeTodoListAC, setTodolistsAC,
@@ -6,7 +6,7 @@ import {
     todolistsReducer
 } from "./todolists-reducer";
 import {v1} from "uuid";
-import {TodolistType} from "../api/todolists-api";
+import {TodolistType} from "../../api/todolists-api";
 import {todoListId_1, todoListId_2} from "./todolists-reducer.test";
 
 test('ids should be equal', ()=> {

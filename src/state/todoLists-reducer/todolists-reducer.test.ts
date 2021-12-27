@@ -6,8 +6,8 @@ import {
     TodolistEntityType,
     todolistsReducer
 } from "./todolists-reducer";
-import {ACTIONS_TYPE} from "./actions";
-import {TodolistType} from "../api/todolists-api";
+import {ACTIONS_TYPE} from "../actions";
+import {TodolistType} from "../../api/todolists-api";
 import {v1} from "uuid";
 
 let state: TodolistEntityType[];
