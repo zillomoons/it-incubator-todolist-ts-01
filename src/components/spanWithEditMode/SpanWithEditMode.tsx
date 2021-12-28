@@ -4,9 +4,10 @@ import styled from "styled-components";
 type PropsType = {
     title: string
     editTitle: (title: string) => void
+    disabled: boolean
 }
 
-export const SpanWithEditMode = React.memo(({title, editTitle}: PropsType) => {
+export const SpanWithEditMode = React.memo(({title, editTitle, disabled}: PropsType) => {
     const [editMode, setEditMode] = useState(false)
     const [value, setValue] = useState('')
     const activateEditMode = () => {
@@ -23,11 +24,14 @@ export const SpanWithEditMode = React.memo(({title, editTitle}: PropsType) => {
         setEditMode(false);
         value.trim() && editTitle(value)
     }
+    const onDoubleClickHandler = () => {
+       !disabled && activateEditMode();
+    }
     return editMode
         ? <StyledInput value={value} onChange={onInputChange}
                        onKeyPress={onKeyPressHandler}
                        onBlur={deactivateEditMode} autoFocus/>
-        : <StyledSpan onDoubleClick={activateEditMode}>{title}</StyledSpan>
+        : <StyledSpan onDoubleClick={onDoubleClickHandler}>{title}</StyledSpan>
 });
 const StyledInput = styled.input`
   display: inline;

@@ -31,7 +31,7 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
             <label>
                 <Checkbox status={task.status} changeStatus={changeStatus}/>
             </label>
-            <SpanWithEditMode title={task.title} editTitle={editTaskTitle}/>
+            <SpanWithEditMode disabled={disabled} title={task.title} editTitle={editTaskTitle}/>
             <DeleteButton disabled={disabled} callback={removeTask}/>
         </TaskContainer>
     )

@@ -1,5 +1,5 @@
 import {
-    addNewTodoAC,
+    addNewTodoAC, changeEntityStatus,
     changeFilterAC,
     editTodoTitleAC,
     setTodolistsAC,
@@ -70,4 +70,10 @@ test('todolist reducer should set todolists with filter to the state ', () => {
     expect(endState[0].id).toBe('2')
     expect(endState[0].filter).toBe('all')
     expect(endState[1].filter).toBe('all')
+})
+test('todolist entity status should be changed', ()=> {
+    const endState = todolistsReducer(state, changeEntityStatus(todoListId_1, 'loading'))
+
+    expect(endState[0].entityStatus).toBe('loading')
+    expect(endState[1].entityStatus).toBe('idle')
 })

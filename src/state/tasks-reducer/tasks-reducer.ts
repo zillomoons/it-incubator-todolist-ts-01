@@ -6,7 +6,7 @@ import {
 import {AppRootStateType} from "../../store/store";
 import {ACTIONS_TYPE} from "../actions";
 import {Dispatch} from "redux";
-import {RequestStatusType, setError, setStatus} from "../app-reducer/app-reducer";
+import {RequestStatusType, setAppError, setAppStatus} from "../app-reducer/app-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {TaskPriorities, TaskStatuses, todolistsAPI, TaskType} from "../../api/todolists-api";
 import {preloaderControl} from "../../utils/preloaderControl";
@@ -83,14 +83,14 @@ export const changeTaskEntityStatus = (todoID: string, taskID: string, status: R
 
 //Thunk creators
 export const getTasks = (todoID: string) => async (dispatch: Dispatch) => {
-    dispatch(setStatus('loading'));
+    dispatch(setAppStatus('loading'));
     try {
         const {data} = await todolistsAPI.getTasks(todoID);
         dispatch(setTasksAC(todoID, data.items));
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
-        dispatch(setStatus('idle'));
+        dispatch(setAppStatus('idle'));
     }
 
 }
@@ -104,7 +104,7 @@ export const deleteTask = (payload: { todoID: string, taskID: string }) => async
             : handleServerAppError(dispatch, data);
 
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
 
     } finally {
         preloaderControl('idle', dispatch, payload.todoID, payload.taskID)
@@ -120,7 +120,7 @@ export const createTask = (todoID: string, title: string) => async (dispatch: Di
             : handleServerAppError(dispatch, data)
 
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
         preloaderControl('idle', dispatch, todoID);
     }
@@ -146,7 +146,7 @@ export const updateTask = (todoID: string, taskID: string, domainModel: UpdateTa
                 data.resultCode === ResultCodes.success && dispatch(updateTaskAC(todoID, taskID, domainModel));
             }
         } catch (error) {
-            error instanceof Error && dispatch(setError(error.message));
+            error instanceof Error && dispatch(setAppError(error.message));
 
         } finally {
             preloaderControl('idle', dispatch, todoID, taskID)

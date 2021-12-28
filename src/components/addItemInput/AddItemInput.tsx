@@ -5,7 +5,7 @@ import {IoAddCircleOutline} from "react-icons/all";
 
 type PropsType = {
     addNewItemTitle: (title: string) => void
-    disabled: boolean
+    disabled?: boolean
 }
 
 export const AddItemInput = React.memo(({addNewItemTitle, disabled}: PropsType) => {

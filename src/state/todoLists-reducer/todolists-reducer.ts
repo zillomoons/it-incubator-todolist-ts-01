@@ -1,7 +1,7 @@
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {ACTIONS_TYPE} from "../actions";
 import {Dispatch} from "redux";
-import {RequestStatusType, setError} from "../app-reducer/app-reducer";
+import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {preloaderControl} from "../../utils/preloaderControl";
@@ -51,7 +51,7 @@ export const getTodolists = () => async (dispatch: Dispatch) => {
         const {data} = await todolistsAPI.getTodolists();
         dispatch(setTodolistsAC(data));
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
         preloaderControl('idle', dispatch);
     }
@@ -65,7 +65,7 @@ export const createTodolist = (title: string) => async (dispatch: Dispatch) => {
             ? dispatch(addNewTodoAC(data.data.item))
             : handleServerAppError(dispatch, data);
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
         preloaderControl('idle', dispatch);
     }
@@ -77,7 +77,7 @@ export const deleteTodolist = (todoID: string) => async (dispatch: Dispatch) => 
         const {data} = await todolistsAPI.deleteTodolist(todoID);
         data.resultCode === ResultCodes.success && dispatch(removeTodoListAC(todoID));
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
         preloaderControl('idle', dispatch, todoID)
     }
@@ -88,7 +88,7 @@ export const updateTodoTitle = (todoID: string, title: string) => async (dispatc
         const {data} = await todolistsAPI.updateTodolist(todoID, title);
         data.resultCode === ResultCodes.success && dispatch(editTodoTitleAC(todoID, title));
     } catch (error: any) {
-        dispatch(setError(error.message));
+        dispatch(setAppError(error.message));
     } finally {
         preloaderControl('idle', dispatch);
     }
