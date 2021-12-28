@@ -4,7 +4,6 @@ import styled from "styled-components";
 type PropsType = {
     title: string
     editTitle: (title: string) => void
-
 }
 
 export const SpanWithEditMode = React.memo(({title, editTitle}: PropsType) => {

@@ -5,19 +5,21 @@ import {Task} from "./task/Task";
 import {TodoTitle} from "../../components/todoListTitle/TodoTitle";
 import {FilterBlock} from "../../components/FilterBlock";
 import styled from "styled-components";
-import { createTask, getTasks} from "../../state/tasks-reducer/tasks-reducer";
+import {createTask, getTasks, TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatuses, TaskType} from "../../api/tasks-api";
+import {RequestStatusType} from "../../state/app-reducer/app-reducer";
+import {TaskStatuses} from "../../api/todolists-api";
 
 
 type ToDoListPropsType = {
-    tasks: TaskType[]
+    tasks: TaskEntityType[]
     todoID: string
     title: string
     filter: FilterValuesType
+    todoEntityStatus: RequestStatusType
 }
 
-export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListPropsType) => {
+export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
     const dispatch = useDispatch();
     let tasksForToDoList = tasks;
 
@@ -44,8 +46,8 @@ export const Todolist = React.memo(({tasks, title, todoID, filter}: ToDoListProp
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (
         <StyledTodolist>
-            <TodoTitle title={title} editTodoTitle={editTodoTitle} removeTodoList={removeTodoList}/>
-            <AddItemInput addNewItemTitle={addTask}/>
+            <TodoTitle title={title} editTodoTitle={editTodoTitle} disabled={todoEntityStatus === 'loading'} removeTodoList={removeTodoList}/>
+            <AddItemInput addNewItemTitle={addTask} disabled={todoEntityStatus === 'loading'}/>
             {mappedTasks}
             <FilterBlock filter={filter} todoID={todoID}/>
         </StyledTodolist>

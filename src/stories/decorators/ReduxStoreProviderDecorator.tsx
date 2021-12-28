@@ -5,9 +5,9 @@ import {tasksReducer} from "../../state/tasks-reducer/tasks-reducer";
 import {todolistsReducer} from "../../state/todoLists-reducer/todolists-reducer";
 import {v1} from 'uuid';
 import {AppRootStateType} from "../../store/store";
-import {TaskPriorities, TaskStatuses} from "../../api/tasks-api";
 import { appReducer } from '../../state/app-reducer/app-reducer';
 import thunkMiddleware from "redux-thunk";
+import {TaskPriorities, TaskStatuses} from '../../api/todolists-api';
 
 
 const rootReducer = combineReducers({
@@ -18,13 +18,14 @@ const rootReducer = combineReducers({
 
 const initialGlobalState = {
     todoLists: [
-        {id: "todolistId1", title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 0},
+        {id: "todolistId1", title: "What to learn", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 0, entityStatus: 'idle'},
     ],
     tasks: {
         ["todolistId1"]: [
             {
                 id: v1(),
+                entityStatus: 'idle',
                 title: "HTML&CSS",
                 description: 'string',
                 status: TaskStatuses.Completed,
@@ -37,6 +38,7 @@ const initialGlobalState = {
             },
             {
                 id: v1(),
+                entityStatus: 'idle',
                 title: "JS",
                 description: 'string',
                 status: TaskStatuses.New,
@@ -52,6 +54,7 @@ const initialGlobalState = {
         ["todolistId2"]: [
             {
                 id: v1(),
+                entityStatus: 'idle',
                 title: "Milk",
                 description: 'string',
                 status: TaskStatuses.Completed,

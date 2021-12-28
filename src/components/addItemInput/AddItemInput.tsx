@@ -5,9 +5,10 @@ import {IoAddCircleOutline} from "react-icons/all";
 
 type PropsType = {
     addNewItemTitle: (title: string) => void
+    disabled: boolean
 }
 
-export const AddItemInput = React.memo(({addNewItemTitle}: PropsType) => {
+export const AddItemInput = React.memo(({addNewItemTitle, disabled}: PropsType) => {
     const [newTitle, setNewTitle] = useState('');
     const [error, setError] = useState<boolean>(false);
 
@@ -30,10 +31,14 @@ export const AddItemInput = React.memo(({addNewItemTitle}: PropsType) => {
     return (
         <StyledInputContainer>
             <div>
-                <StyledInput value={newTitle} onChange={onNewTaskChanged} onKeyPress={onKeyPressHandler} error={error}/>
+                <StyledInput value={newTitle}
+                             disabled={disabled}
+                             onChange={onNewTaskChanged}
+                             onKeyPress={onKeyPressHandler}
+                             error={error}/>
                 {error && <div className={'error-message'}>Title is required</div>}
             </div>
-            <StyledIconButton size={28} onClick={addNewTitle}>
+            <StyledIconButton size={28} onClick={addNewTitle} disabled={disabled}>
                 <IoAddCircleOutline/>
             </StyledIconButton>
         </StyledInputContainer>

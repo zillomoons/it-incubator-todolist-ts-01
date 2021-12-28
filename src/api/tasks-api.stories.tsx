@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import {tasksAPI} from "./tasks-api";
+import {todolistsAPI} from "./todolists-api";
 
 export default {
     title: 'API/tasks',
@@ -9,7 +9,7 @@ export const GetTasks = () => {
     const [state, setState] = useState<any>(null);
     const [todoID, setTodoID] = useState('');
     const getTasks = () => {
-        tasksAPI.getTasks(todoID).then(res => {
+        todolistsAPI.getTasks(todoID).then(res => {
             setState(res.data)
 
         })
@@ -30,7 +30,7 @@ export const CreateTask = () => {
     const [todoID, setTodoID] = useState('');
     const [taskTitle, setTaskTitle] = useState('');
     const createTask = () => {
-        tasksAPI.createTask(todoID, taskTitle).then(res => setState(res.data.data));
+        todolistsAPI.createTask(todoID, taskTitle).then(res => setState(res.data.data));
     }
     return <div>
         <div>
@@ -49,7 +49,7 @@ export const UpdateTask = () => {
     const [taskID, setTaskID] = useState('');
     const [taskTitle, setTaskTitle] = useState('');
     const editTask = () => {
-        tasksAPI.updateTask(todoID, taskID, { title: taskTitle, deadline: null,
+        todolistsAPI.updateTask(todoID, taskID, { title: taskTitle, deadline: null,
             description: '', priority: 1, startDate: '', status: 1 }).then(res => setState(res.data));
     }
 
@@ -67,7 +67,7 @@ export const DeleteTask = () => {
     const [todoID, setTodoID] = useState('');
     const [taskID, setTaskID] = useState('');
     const deleteTask = () => {
-        tasksAPI.deleteTask(todoID, taskID).then(res => setState(res.data));
+        todolistsAPI.deleteTask({todoID, taskID}).then(res => setState(res.data));
     }
 
     return <div>

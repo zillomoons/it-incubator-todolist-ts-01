@@ -5,8 +5,8 @@ import {
     tasksReducer,
     TaskStateType
 } from "./tasks-reducer";
-import {TaskStatuses} from "../../api/tasks-api";
 import {todoListId_1, todoListId_2} from "../todoLists-reducer/todolists-reducer.test";
+import { TaskStatuses } from "../../api/todolists-api";
 
 let startState: TaskStateType;
 beforeEach(()=>{
@@ -15,6 +15,7 @@ beforeEach(()=>{
             {
                 id: '1',
                 title: "HTML&CSS",
+                entityStatus: 'idle',
                 description: 'string',
                 status: TaskStatuses.Completed,
                 priority: 1,
@@ -27,6 +28,7 @@ beforeEach(()=>{
             {
                 id: '2',
                 title: "JS",
+                entityStatus: 'idle',
                 description: 'string',
                 status: TaskStatuses.New,
                 priority: 1,
@@ -41,6 +43,7 @@ beforeEach(()=>{
             {
                 id: '1',
                 title: "Milk",
+                entityStatus: 'idle',
                 description: 'string',
                 status: TaskStatuses.Completed,
                 priority: 1,

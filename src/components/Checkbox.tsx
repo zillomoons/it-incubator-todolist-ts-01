@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from "react";
 import styled from "styled-components";
-import {TaskStatuses} from "../api/tasks-api";
+import {TaskStatuses} from "../api/todolists-api";
 
 type PropsType = {
     status: TaskStatuses

@@ -3,17 +3,18 @@ import {SpanWithEditMode} from "../../../components/spanWithEditMode/SpanWithEdi
 import {Checkbox} from "../../../components/Checkbox";
 import {DeleteButton} from "../../../components/DeleteButton";
 import styled from "styled-components";
-import {deleteTask, updateTask} from "../../../state/tasks-reducer/tasks-reducer";
+import {deleteTask, TaskEntityType, updateTask} from "../../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatuses, TaskType} from "../../../api/tasks-api";
+import {TaskStatuses} from "../../../api/todolists-api";
 
 type PropsType = {
     todoID: string
-    task: TaskType
+    task: TaskEntityType
 }
 
 export const Task = React.memo(({task, todoID}: PropsType) => {
     const dispatch = useDispatch();
+    const disabled = task.entityStatus === 'loading';
     const editTaskTitle = useCallback((title: string) => {
         dispatch(updateTask(todoID, task.id, {title}));
     }, [dispatch, todoID, task.id])
@@ -21,7 +22,7 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
         dispatch(updateTask(todoID, task.id, { status }));
     }, [dispatch, todoID, task.id])
     const removeTask = useCallback(() => {
-        dispatch(deleteTask(todoID, task.id));
+        dispatch(deleteTask({todoID, taskID: task.id }));
     }, [dispatch, todoID, task.id])
 
     const TaskStyle = `${'taskStyle'} ${task.status ? TaskStatuses.Completed : ''}`
@@ -31,7 +32,7 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
                 <Checkbox status={task.status} changeStatus={changeStatus}/>
             </label>
             <SpanWithEditMode title={task.title} editTitle={editTaskTitle}/>
-            <DeleteButton callback={removeTask}/>
+            <DeleteButton disabled={disabled} callback={removeTask}/>
         </TaskContainer>
     )
 } );

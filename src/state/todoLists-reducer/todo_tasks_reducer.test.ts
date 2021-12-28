@@ -32,6 +32,7 @@ test('property with todoID should be deleted from Tasks state', ()=>{
             {
                 id: v1(),
                 title: "HTML&CSS",
+                entityStatus: 'idle',
                 description: 'string',
                 status: 1,
                 priority: 1,
@@ -44,6 +45,7 @@ test('property with todoID should be deleted from Tasks state', ()=>{
             {
                 id: v1(),
                 title: "JS",
+                entityStatus: 'idle',
                 description: 'string',
                 status: 1,
                 priority: 1,
@@ -58,6 +60,7 @@ test('property with todoID should be deleted from Tasks state', ()=>{
             {
                 id: v1(),
                 title: "Milk",
+                entityStatus: 'idle',
                 description: 'string',
                 status: 1,
                 priority: 1,

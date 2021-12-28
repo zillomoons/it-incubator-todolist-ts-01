@@ -7,12 +7,13 @@ type PropsType = {
     title: string
     editTodoTitle: (title: string) => void
     removeTodoList: () => void
+    disabled: boolean
 }
 
-export const TodoTitle = React.memo(({title, editTodoTitle, removeTodoList}: PropsType) => {
+export const TodoTitle = React.memo(({title, editTodoTitle, removeTodoList ,disabled}: PropsType) => {
     return <TodoTitleStyled>
         <SpanWithEditMode title={title} editTitle={editTodoTitle}/>
-        <DeleteButton callback={removeTodoList}/>
+        <DeleteButton disabled={disabled} callback={removeTodoList}/>
     </TodoTitleStyled>
 })
 
