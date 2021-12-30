@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback} from "react";
 import {AddItemInput} from "../../components/addItemInput/AddItemInput";
 import {deleteTodolist, FilterValuesType, updateTodoTitle} from "../../state/todoLists-reducer/todolists-reducer";
 import {Task} from "./task/Task";
 import {TodoTitle} from "../../components/todoListTitle/TodoTitle";
 import {FilterBlock} from "../../components/FilterBlock";
 import styled from "styled-components";
-import {createTask, getTasks, TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
+import {createTask, TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
@@ -16,9 +16,9 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
     const dispatch = useDispatch();
     let tasksForToDoList = tasks;
 
-    useEffect(()=> {
-        dispatch(getTasks(todoID));
-    }, [todoID, dispatch])
+    // useEffect(()=> {
+    //     dispatch(getTasks(todoID));
+    // }, [todoID, dispatch])
 
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.New)

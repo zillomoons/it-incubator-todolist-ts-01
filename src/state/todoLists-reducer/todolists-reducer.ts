@@ -1,10 +1,12 @@
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {ACTIONS_TYPE} from "../actions";
-import {Dispatch} from "redux";
+import {AnyAction, Dispatch} from "redux";
 import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
-import {ResultCodes} from "../tasks-reducer/tasks-reducer";
+import {getTasks, ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {preloaderControl} from "../../utils/preloaderControl";
+import {AppRootStateType} from "../../store/store";
+import {ThunkDispatch} from "redux-thunk";
 
 const initialState: TodolistEntityType[] = []
 
@@ -44,16 +46,28 @@ export const changeEntityStatus = (todoID: string, status: RequestStatusType) =>
 } as const)
 
 // Thunk creators
-export const getTodolists = () => async (dispatch: Dispatch) => {
+export const getTodolists = () => (dispatch: ThunkDispatch<void, AppRootStateType, AnyAction>) => {
     preloaderControl('loading', dispatch);
-    try {
-        const {data} = await todolistsAPI.getTodolists();
-        dispatch(setTodolistsAC(data));
-    } catch (error: any) {
-        dispatch(setAppError(error.message));
-    } finally {
-        preloaderControl('idle', dispatch);
-    }
+    todolistsAPI.getTodolists().then((res) => {
+        dispatch(setTodolistsAC(res.data));
+        return res.data;
+    }).then((todos)=>{
+        todos.forEach((todo)=>{
+            dispatch(getTasks(todo.id));
+        })
+    }).catch((error: any)=>{
+        dispatch(setAppError(error.message))
+    }).finally(()=>{
+        preloaderControl('idle', dispatch)
+    })
+    // try {
+    //     const {data} = await todolistsAPI.getTodolists();
+    //     dispatch(setTodolistsAC(data));
+    // } catch (error: any) {
+    //     dispatch(setAppError(error.message));
+    // } finally {
+    //     preloaderControl('idle', dispatch);
+    // }
 }
 export const createTodolist = (title: string) => async (dispatch: Dispatch) => {
     preloaderControl('loading', dispatch);

@@ -47,7 +47,7 @@ export const AddItemInput = React.memo(({addNewItemTitle, disabled}: PropsType) 
 
 const StyledInputContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   margin: 10px auto;
 `
