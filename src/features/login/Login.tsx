@@ -30,9 +30,9 @@ export const Login = () => {
             formik.resetForm();
         },
     })
-    const isLoggedIn = useAppSelector<boolean>(state=> state.auth.isLoggedIn);
-    if (isLoggedIn){
-        return <Navigate to='/' />
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+    if (isLoggedIn) {
+        return <Navigate to='/'/>
     }
     return (
         <StyledFormContainer>
@@ -46,7 +46,7 @@ export const Login = () => {
                 <p>Email: free@samuraijs.com</p>
                 <p>Password: free</p>
             </StyledInfo>
-            <form onSubmit={formik.handleSubmit}>
+            <StyledForm onSubmit={formik.handleSubmit}>
                 <StyledLabel htmlFor="email">
                     Email
                     <input type="email" {...formik.getFieldProps('email')}/>
@@ -63,8 +63,8 @@ export const Login = () => {
                     <input type="checkbox" {...formik.getFieldProps('rememberMe')}/>
                     remember me
                 </StyledCheckboxLabel>
-                <button type='submit'>LOGIN</button>
-            </form>
+                <StyledLoginBtn type='submit'>LOGIN</StyledLoginBtn>
+            </StyledForm>
         </StyledFormContainer>
     )
 }
@@ -72,7 +72,7 @@ export const Login = () => {
 export const StyledFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   width: 300px;
   margin: 50px auto;
@@ -82,23 +82,47 @@ export const StyledFormContainer = styled.div`
   box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
   padding: 10px 8px;
 `
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
 export const StyledLabel = styled.label`
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin-bottom: 10px;
+  justify-content: center;
 `
-export const StyledCheckboxLabel = styled.label`
+const StyledCheckboxLabel = styled.label`
   display: flex;
   align-items: center;
   gap: 5px;
   margin-bottom: 10px;
 `
-export const StyledInfo = styled.div`
+const StyledInfo = styled.div`
   background: lightblue;
   border-radius: 5px;
   padding: 3px 5px;
 `
+const StyledLoginBtn = styled.button`
+  margin: 15px;
+  background: darkcyan;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 8px 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
+  transition: .3s ease-in-out;
+  text-transform: uppercase;
+
+  &:hover {
+    box-shadow: 0 5px 10px 5px rgba(0, 139, 139, 0.25);
+    transform: translateY(-1px);
+`
+
 type FormikErrorType = {
     email?: string
     password?: string

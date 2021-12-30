@@ -18,7 +18,7 @@ export const Header = React.memo(() => {
         <>
             <StyledHeaderContainer>
                 <h3 style={{marginLeft: '15px'}}>Todo App</h3>
-                {isLoggedIn && <StyledLogout onClick={onLogout}>LOGOUT <AiOutlineLogout /></StyledLogout>}
+                {isLoggedIn && <StyledLogout onClick={onLogout}><span>Logout</span> <AiOutlineLogout /></StyledLogout>}
             </StyledHeaderContainer>
             {status === 'loading' && <LinearProgress color='secondary'/>}
         </>
@@ -34,15 +34,18 @@ const StyledHeaderContainer = styled.div`
   align-items: center;
 `
 const StyledLogout = styled.button`
+  display: flex;
+  gap: 5px;
   margin: 0 15px;
   background: white;
   color: darkcyan;
   font-weight: bold;
   border: none;
-  padding: 2px 8px;
+  padding: 5px 15px;
   border-radius: 15px;
   box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
   transition: .3s ease-in-out;
+  text-transform: uppercase;
 
   &:hover {
     box-shadow: 0 5px 10px 5px rgba(255, 255, 147, 0.25);
