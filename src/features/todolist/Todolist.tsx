@@ -11,13 +11,6 @@ import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 
 
-type ToDoListPropsType = {
-    tasks: TaskEntityType[]
-    todoID: string
-    title: string
-    filter: FilterValuesType
-    todoEntityStatus: RequestStatusType
-}
 
 export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
     const dispatch = useDispatch();
@@ -66,3 +59,10 @@ const StyledTodolist = styled.div`
   align-items: center;
 
 `
+type ToDoListPropsType = {
+    tasks: TaskEntityType[]
+    todoID: string
+    title: string
+    filter: FilterValuesType
+    todoEntityStatus: RequestStatusType
+}

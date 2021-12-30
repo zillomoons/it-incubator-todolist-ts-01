@@ -1,9 +1,3 @@
-.TodoLists {
-  padding: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-}
 
 .error-message {
   color: red;

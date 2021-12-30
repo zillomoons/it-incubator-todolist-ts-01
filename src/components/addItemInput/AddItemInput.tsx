@@ -49,7 +49,7 @@ const StyledInputContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  margin: 10px 0;
+  margin: 10px auto;
 `
 const StyledInput = styled.input<{ error: boolean }>`
   width: 220px;

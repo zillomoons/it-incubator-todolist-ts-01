@@ -1,42 +1,38 @@
 import React, {useEffect} from 'react';
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import './App.css';
-import {Todolist} from "../features/todolist/Todolist";
+import {TodolistList} from "../features/todolist/TodolistList";
+import {Login} from "../features/login/Login";
 import {Header} from "../components/Header";
+import {initializeApp} from "../state/app-reducer/app-reducer";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../store/store";
-import {TaskStateType} from "../state/tasks-reducer/tasks-reducer";
-import {getTodolists, TodolistEntityType} from "../state/todoLists-reducer/todolists-reducer";
-import LinearProgress from "@mui/material/LinearProgress";
-import {RequestStatusType} from "../state/app-reducer/app-reducer";
-import {ErrorSnackBar} from "../common/ErrorSnackBar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 const App = () => {
-    const todoLists = useAppSelector<TodolistEntityType[]>(state => state.todoLists);
-    const tasks = useAppSelector<TaskStateType>(state => state.tasks);
-    const status = useAppSelector<RequestStatusType>(state => state.app.status);
     const dispatch = useDispatch();
-
+    const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized);
     useEffect(() => {
-        dispatch(getTodolists());
+        dispatch(initializeApp());
     }, [dispatch])
-    const mappedTodoLists = todoLists.map(todo => {
-        return <Todolist key={todo.id}
-                         tasks={tasks[todo.id]}
-                         todoEntityStatus={todo.entityStatus}
-                         todoID={todo.id}
-                         title={todo.title}
-                         filter={todo.filter}/>
-    })
-    return (
-        <div>
-            <Header/>
-            {status === 'loading' && <LinearProgress color='secondary'/>}
-            <div className="TodoLists">
-                {mappedTodoLists}
-            </div>
-            <ErrorSnackBar/>
+
+    if (!isInitialized){
+        return <div style={{position: 'fixed', top: '30%', textAlign: "center", width: '100%'}}>
+            <CircularProgress />
         </div>
+    }
+    return (
+        <BrowserRouter>
+            <Header/>
+            <Routes>
+                <Route path='/' element={<TodolistList/>}/>
+                <Route path='/login' element={<Login/>}/>
+                <Route path='/404' element={<h1>404: PAGE NOT FOUND</h1>}/>
+                <Route path='*' element={<Navigate to='/404'/>}/>
+            </Routes>
+        </BrowserRouter>
+
     );
 };
 

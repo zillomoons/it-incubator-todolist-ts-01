@@ -46,7 +46,6 @@ export const changeEntityStatus = (todoID: string, status: RequestStatusType) =>
 // Thunk creators
 export const getTodolists = () => async (dispatch: Dispatch) => {
     preloaderControl('loading', dispatch);
-
     try {
         const {data} = await todolistsAPI.getTodolists();
         dispatch(setTodolistsAC(data));
@@ -55,7 +54,6 @@ export const getTodolists = () => async (dispatch: Dispatch) => {
     } finally {
         preloaderControl('idle', dispatch);
     }
-
 }
 export const createTodolist = (title: string) => async (dispatch: Dispatch) => {
     preloaderControl('loading', dispatch);
