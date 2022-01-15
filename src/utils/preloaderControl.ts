@@ -4,8 +4,8 @@ import {Dispatch} from "redux";
 import {changeTaskEntityStatus} from "../state/tasks-reducer/tasks-reducer";
 
 export const preloaderControl = (status: RequestStatusType, dispatch: Dispatch, todoID?: string, taskID?: string) => {
-    dispatch(setAppStatus(status));
-    todoID && dispatch(changeEntityStatus(todoID, status));
-    todoID && taskID && dispatch(changeTaskEntityStatus(todoID, taskID, status));
+    dispatch(setAppStatus({status}));
+    todoID && dispatch(changeEntityStatus({todoID, status}));
+    todoID && taskID && dispatch(changeTaskEntityStatus({todoID, taskID, status}));
 
 }

@@ -3,29 +3,31 @@ import {authAPI} from "../../api/todolists-api";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {setIsLoggedIn} from "../auth-reducer/auth-reducer";
 import {preloaderControl} from "../../utils/preloaderControl";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: AppInitialStateType = {
-    status: 'idle',
-    error: null,
+const initialState = {
+    status: 'idle' as RequestStatusType,
+    error: null as string | null,
     isInitialized: false,
 }
-export const appReducer = (state = initialState, action: ActionsType): AppInitialStateType => {
-    switch (action.type) {
-        case "APP/SET-ERROR":
-            return {...state, error: action.error};
-        case "APP/SET-STATUS":
-            return {...state, status: action.status};
-        case "APP/SET-IS-INITIALIZED":
-            return {...state, isInitialized: action.isInitialized}
-        default:
-            return state;
+const slice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppError(state, action: PayloadAction<{error: string | null}>){
+            state.error = action.payload.error;
+        },
+        setAppStatus(state, action: PayloadAction<{status: RequestStatusType}>){
+            state.status = action.payload.status;
+        },
+        setIsInitialized(state, action: PayloadAction<{isInitialized: boolean}>){
+            state.isInitialized = action.payload.isInitialized;
+        }
     }
-}
-
+})
+export const appReducer = slice.reducer;
 //Action creators
-export const setAppError = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const);
-export const setAppStatus = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
-export const setIsInitialized = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);
+export const {setAppError, setAppStatus, setIsInitialized} = slice.actions;
 
 //Thunk creators
 export const initializeApp = () => async (dispatch: Dispatch) => {
@@ -33,7 +35,7 @@ export const initializeApp = () => async (dispatch: Dispatch) => {
     try {
         const {data} = await authAPI.me();
         if (data.resultCode === ResultCodes.success) {
-            dispatch(setIsLoggedIn(true))
+            dispatch(setIsLoggedIn({value: true}))
         }
         // else {
         //     handleServerAppError(dispatch, data)
@@ -42,16 +44,33 @@ export const initializeApp = () => async (dispatch: Dispatch) => {
         setAppError(e.message);
     } finally {
         preloaderControl('idle', dispatch)
-        dispatch(setIsInitialized(true))
+        dispatch(setIsInitialized({isInitialized: true}))
     }
 }
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-export type AppInitialStateType = {
-    status: RequestStatusType
-    error: string | null
-    isInitialized: boolean
-}
-export type ActionsType = ReturnType<typeof setAppError>
-    | ReturnType<typeof setAppStatus>
-    | ReturnType<typeof setIsInitialized>
+
+// export type AppInitialStateType = {
+//     status: RequestStatusType
+//     error: string | null
+//     isInitialized: boolean
+// }
+// export type ActionsType = ReturnType<typeof setAppError>
+//     | ReturnType<typeof setAppStatus>
+//     | ReturnType<typeof setIsInitialized>
+//     (state = initialState, action: ActionsType): AppInitialStateType => {
+//     switch (action.type) {
+//         case "APP/SET-ERROR":
+//             return {...state, error: action.error};
+//         case "APP/SET-STATUS":
+//             return {...state, status: action.status};
+//         case "APP/SET-IS-INITIALIZED":
+//             return {...state, isInitialized: action.isInitialized}
+//         default:
+//             return state;
+//     }
+// }
+//Action creators
+// export const setAppError = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const);
+// export const setAppStatus = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
+// export const setIsInitialized = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);

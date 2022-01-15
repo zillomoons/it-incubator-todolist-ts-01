@@ -56,7 +56,7 @@ beforeEach(()=>{
     }
 })
 test('tasksReducer should remove task from correct todolist', ()=> {
-    let changedState = tasksReducer(startState, removeTaskAC(todoListId_1,'2' ))
+    let changedState = tasksReducer(startState, removeTaskAC({todoID: todoListId_1, taskID: '2'} ))
 
     expect(changedState[todoListId_1].length).toBe(1);
     expect(changedState[todoListId_2].length).toBe(1);
@@ -74,7 +74,7 @@ test('tasksReducer should add task with correct title in correct todolist', ()=>
         order: 1,
         addedDate: ''
     }
-    let changedState = tasksReducer(startState, addTaskAC(task))
+    let changedState = tasksReducer(startState, addTaskAC({task}))
 
     expect(changedState[todoListId_1].length).toBe(3);
     expect(changedState[todoListId_1][0].title).toBe('NodeJS')
@@ -82,7 +82,7 @@ test('tasksReducer should add task with correct title in correct todolist', ()=>
 })
 test('tasksReducer should edit title of correct task', ()=> {
     let updateModel = {title: 'Ice Cream'}
-    let changedState = tasksReducer(startState, updateTaskAC(todoListId_2, '1',updateModel))
+    let changedState = tasksReducer(startState, updateTaskAC({todoID: todoListId_2, taskID: '1', model: updateModel}))
 
     expect(changedState[todoListId_1].length).toBe(2);
     expect(changedState[todoListId_2][0].title).toBe('Ice Cream')
@@ -90,7 +90,7 @@ test('tasksReducer should edit title of correct task', ()=> {
 })
 test('tasksReducer should change status in correct task', ()=> {
     let updateModel = {status: TaskStatuses.New }
-    let changedState = tasksReducer(startState, updateTaskAC(todoListId_2,'1', updateModel))
+    let changedState = tasksReducer(startState, updateTaskAC({todoID:todoListId_2, taskID: '1', model: updateModel}))
 
     expect(changedState[todoListId_1].length).toBe(2);
     expect(changedState[todoListId_2][0].status).toBe(TaskStatuses.New)

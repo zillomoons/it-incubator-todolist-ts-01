@@ -4,22 +4,24 @@ import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {setAppError} from "../app-reducer/app-reducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn: false,
 }
 
-export const authReducer = (state = initialState, action: ActionsType): AuthInitStateType => {
-    switch (action.type) {
-        case "AUTH/SET-IS-LOGGED-IN":
-            return {...state, isLoggedIn: action.value}
-        default:
-            return state
+const slice = createSlice({
+    name: 'auth',
+    initialState: initialState,
+    reducers: {
+        setIsLoggedIn(state, action:PayloadAction<{value:boolean}>){
+            state.isLoggedIn = action.payload.value;
+        }
     }
-}
+})
 
-//Action Creators
-export const setIsLoggedIn = (value: boolean) => ({type: 'AUTH/SET-IS-LOGGED-IN', value} as const);
+export const authReducer = slice.reducer;
+export const { setIsLoggedIn } = slice.actions;
 
 //Thunk Creators
 export const login = (loginParams: LoginParamsType) => async (dispatch: Dispatch) => {
@@ -27,12 +29,12 @@ export const login = (loginParams: LoginParamsType) => async (dispatch: Dispatch
     try {
         const {data} = await authAPI.login(loginParams);
         if (data.resultCode === ResultCodes.success) {
-            dispatch(setIsLoggedIn(true))
+            dispatch(setIsLoggedIn({value: true}))
         } else {
             handleServerAppError(dispatch, data)
         }
     } catch (e: any) {
-        dispatch(setAppError(e.message));
+        dispatch(setAppError({error:e.message}));
     } finally {
         preloaderControl('idle', dispatch)
     }
@@ -43,15 +45,27 @@ export const logout = () => async (dispatch: Dispatch) => {
     try {
         const {data} = await authAPI.logout();
         data.resultCode === ResultCodes.success
-            ? dispatch(setIsLoggedIn(false))
+            ? dispatch(setIsLoggedIn({value:false} ))
             : handleServerAppError(dispatch, data)
     } catch (e: any) {
-        dispatch(setAppError(e.message));
+        dispatch(setAppError({error:e.message}));
     } finally {
         preloaderControl('idle', dispatch)
     }
 }
 
 //Types
-export type AuthInitStateType = typeof initialState;
-type ActionsType = ReturnType<typeof setIsLoggedIn>
+//типизация не нужна, она создается автоматически библиотекой
+// export type AuthInitStateType = typeof initialState;
+// type ActionsType = ReturnType<typeof setIsLoggedIn>
+// boilerplate of reducer and action creators is reduced thanks to slice
+// const authReducer = (state = initialState, action: ActionsType): AuthInitStateType => {
+//     switch (action.type) {
+//         case "AUTH/SET-IS-LOGGED-IN":
+//             return {...state, isLoggedIn: action.value}
+//         default:
+//             return state
+//     }
+// }
+//Action Creators
+// export const setIsLoggedIn = (value: boolean) => ({type: 'AUTH/SET-IS-LOGGED-IN', value} as const);
