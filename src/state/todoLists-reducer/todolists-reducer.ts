@@ -25,8 +25,7 @@ export const getTodolists = createAsyncThunk(
         } finally {
             preloaderControl('idle', dispatch)
         }
-    }
-)
+    })
 export const createTodolist = createAsyncThunk(
     'todolists/createTodolist',
     async (title: string, {dispatch, rejectWithValue}) => {
@@ -46,8 +45,7 @@ export const createTodolist = createAsyncThunk(
             preloaderControl('idle', dispatch);
         }
 
-    }
-)
+    })
 
 export const deleteTodolist = createAsyncThunk(
     'todolists/deleteTodolist',
@@ -67,8 +65,7 @@ export const deleteTodolist = createAsyncThunk(
         } finally {
             preloaderControl('idle', dispatch, todoID)
         }
-    }
-)
+    })
 
 export const updateTodoTitle = createAsyncThunk(
     'todolists, updateTodolist',
@@ -88,10 +85,7 @@ export const updateTodoTitle = createAsyncThunk(
         } finally {
             preloaderControl('idle', dispatch);
         }
-    }
-)
-
-
+    })
 
 const slice = createSlice({
     name: 'todolist',
@@ -127,11 +121,7 @@ const slice = createSlice({
 
 export const todolistsReducer = slice.reducer;
 //Action creators
-export const {
-    changeFilterAC,
-    changeEntityStatus
-} = slice.actions;
-
+export const {changeFilterAC, changeEntityStatus} = slice.actions;
 
 //Types
 export type FilterValuesType = 'all' | 'completed' | 'active'
@@ -141,36 +131,3 @@ export type TodolistEntityType = TodolistType & {
     entityStatus: RequestStatusType
 }
 
-//     (state = initialState, action: ActionsType): TodolistEntityType[] => {
-//     switch (action.type) {
-//         case ACTIONS_TYPE.REMOVE_TODOLIST:
-//             return state.filter(tl => tl.id !== action.todoID)
-//         case ACTIONS_TYPE.EDIT_TODOLIST:
-//             return state.map(tl => tl.id === action.todoID
-//                 ? {...tl, title: action.title} : tl)
-//         case ACTIONS_TYPE.ADD_TODOLIST:
-//             return [{...action.tl, filter: 'all', entityStatus: 'idle'}, ...state]
-//         case ACTIONS_TYPE.CHANGE_FILTER:
-//             return state.map(tl => tl.id === action.todoID
-//                 ? {...tl, filter: action.value} : tl);
-//         case ACTIONS_TYPE.SET_TODOLISTS:
-//             return action.todolists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}));
-//         case ACTIONS_TYPE.CHANGE_ENTITY_STATUS:
-//             return state.map(tl => tl.id === action.todoID ? {...tl, entityStatus: action.status} : tl)
-//         default:
-//             return state;
-//     }
-// }
-// Action creators
-// export const removeTodoListAC = (todoID: string) => ({type: ACTIONS_TYPE.REMOVE_TODOLIST, todoID} as const)
-// export const editTodoTitleAC = (todoID: string, title: string) => ({
-//     type: ACTIONS_TYPE.EDIT_TODOLIST, todoID, title
-// } as const)
-// export const addNewTodoAC = (tl: TodolistType) => ({type: ACTIONS_TYPE.ADD_TODOLIST, tl} as const)
-// export const changeFilterAC = (todoID: string, value: FilterValuesType,) => ({
-//     type: ACTIONS_TYPE.CHANGE_FILTER, todoID, value
-// } as const)
-// export const setTodolistsAC = (todolists: TodolistType[]) => ({type: ACTIONS_TYPE.SET_TODOLISTS, todolists} as const)
-// export const changeEntityStatus = (todoID: string, status: RequestStatusType) => ({
-//     type: ACTIONS_TYPE.CHANGE_ENTITY_STATUS, status, todoID
-// } as const)

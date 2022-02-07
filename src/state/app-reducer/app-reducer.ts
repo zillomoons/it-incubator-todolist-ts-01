@@ -20,8 +20,7 @@ export const initializeApp = createAsyncThunk(
         } finally {
             preloaderControl('idle', dispatch)
         }
-    }
-)
+    })
 
 const slice = createSlice({
     name: 'app',
@@ -48,7 +47,6 @@ const slice = createSlice({
 export const appReducer = slice.reducer;
 //Action creators
 export const {setAppError, setAppStatus} = slice.actions;
-
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 

@@ -52,8 +52,8 @@ export const deleteTask = createAsyncThunk(
         } finally {
             preloaderControl('idle', thunkAPI.dispatch, param.todoID, param.taskID)
         }
-    }
-)
+    })
+
 export const createTask = createAsyncThunk(
     'tasks/createTask',
     async (param: { todoID: string, title: string }, {dispatch, rejectWithValue}) => {
@@ -114,8 +114,7 @@ export const updateTask = createAsyncThunk(
         } finally {
             preloaderControl('idle', dispatch, param.todoID, param.taskID)
         }
-    }
-)
+    })
 
 
 const initialState: TaskStateType = {}
@@ -123,9 +122,7 @@ const initialState: TaskStateType = {}
 const slice = createSlice({
     name: 'tasks',
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(createTodolist.fulfilled, (state, action) => {
