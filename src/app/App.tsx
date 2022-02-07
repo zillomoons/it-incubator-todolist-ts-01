@@ -8,6 +8,7 @@ import {initializeApp} from "../state/app-reducer/app-reducer";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../store/store";
 import CircularProgress from "@mui/material/CircularProgress";
+import {ErrorSnackBar} from "../common/ErrorSnackBar";
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
     }
     return (
         <BrowserRouter>
+            <ErrorSnackBar/>
             <Header/>
             <Routes>
                 <Route path='/' element={<TodolistList/>}/>

@@ -1,12 +1,10 @@
 import {
-    addNewTodoAC, changeEntityStatus,
-    changeFilterAC,
-    editTodoTitleAC,
-    setTodolistsAC,
+    changeEntityStatus,
+    changeFilterAC, createTodolist, deleteTodolist,
+    getTodolists,
     TodolistEntityType,
-    todolistsReducer
+    todolistsReducer, updateTodoTitle
 } from "./todolists-reducer";
-import {ACTIONS_TYPE} from "../actions";
 import {TodolistType} from "../../api/todolists-api";
 import {v1} from "uuid";
 
@@ -24,15 +22,15 @@ beforeEach(()=> {
 
 test('todolist reducer should remove correct todolist', ()=> {
 
-    let changedState = todolistsReducer(state, {type: ACTIONS_TYPE.REMOVE_TODOLIST, todoID: todoListId_1})
+    let changedState = todolistsReducer(state, deleteTodolist.fulfilled({todoID: todoListId_1}, '', todoListId_1))
 
     expect(changedState.length).toBe(1)
     expect(changedState[0].id).toBe(todoListId_2)
 
 })
 test('todolist reducer should edit correct todolist title', ()=> {
-
-    let changedState = todolistsReducer(state, editTodoTitleAC({todoID: todoListId_2, title: 'What to search'}))
+    const update = {todoID: todoListId_2, title: 'What to search'};
+    let changedState = todolistsReducer(state, updateTodoTitle.fulfilled(update, '', update ))
 
     expect(changedState.length).toBe(2)
     expect(changedState[0].title).toBe('What to learn')
@@ -43,7 +41,7 @@ test('todolist reducer should add new todo with correct title', ()=> {
     let newTodo = {
         id:"dc67d646-68bd-4ec5-94d3-93bad218c53a",title:"What to watch",addedDate:"2021-12-16T19:30:45.9613775Z",order:-7
     }
-    let changedState = todolistsReducer(state, addNewTodoAC({todo: newTodo}))
+    let changedState = todolistsReducer(state, createTodolist.fulfilled({tl: newTodo}, '', newTodo.title))
 
     expect(changedState.length).toBe(3)
     expect(changedState[1].title).toBe('What to learn')
@@ -64,7 +62,7 @@ test('todolist reducer should set todolists with filter to the state ', () => {
         {id: '1', title: 'What to read', addedDate: '', order: 0},
         {id: '3', title: 'What to watch', addedDate: '', order: 0},
     ]
-    const endState = todolistsReducer(state, setTodolistsAC({todolists}))
+    const endState = todolistsReducer(state, getTodolists.fulfilled({todolists}, ''))
 
     expect(endState.length).toBe(3)
     expect(endState[0].id).toBe('2')

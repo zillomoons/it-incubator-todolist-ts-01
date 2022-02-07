@@ -1,12 +1,11 @@
 import {useFormik} from "formik";
 import styled from "styled-components";
-import {useDispatch} from "react-redux";
 import {login} from "../../state/auth-reducer/auth-reducer";
-import {useAppSelector} from "../../store/store";
+import { useAppDispatch, useAppSelector} from "../../store/store";
 import {Navigate} from "react-router-dom";
 
 export const Login = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -14,7 +13,7 @@ export const Login = () => {
             rememberMe: false
         },
         validate: (values) => {
-            const errors: FormikErrorType = {};
+            const errors: FormikValuesType = {};
             if (!values.email) {
                 errors.email = 'Required';
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -25,9 +24,16 @@ export const Login = () => {
             }
             return errors;
         },
-        onSubmit: values => {
-            dispatch(login(values));
-            formik.resetForm();
+        onSubmit: async (values, formikHelpers) => {
+            const action = await dispatch(login(values));
+            if (login.rejected.match(action)){
+                if(action.payload?.fieldsErrors?.length){
+                    const error = action.payload?.fieldsErrors[0];
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+
+            }
+            // formik.resetForm();
         },
     })
     const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
@@ -123,7 +129,7 @@ const StyledLoginBtn = styled.button`
     transform: translateY(-1px);
 `
 
-type FormikErrorType = {
+type FormikValuesType = {
     email?: string
     password?: string
     rememberMe?: boolean

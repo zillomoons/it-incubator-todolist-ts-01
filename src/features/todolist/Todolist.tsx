@@ -30,10 +30,10 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
         dispatch(deleteTodolist(todoID));
     }, [dispatch, todoID])
     const editTodoTitle = useCallback((title: string) => {
-        dispatch(updateTodoTitle(todoID, title));
+        dispatch(updateTodoTitle({todoID, title}));
     }, [dispatch, todoID])
     const addTask = useCallback((title: string) => {
-        dispatch(createTask(todoID, title));
+        dispatch(createTask({todoID, title}));
     }, [dispatch, todoID])
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)

@@ -1,4 +1,3 @@
-import {ErrorSnackBar} from "../../common/ErrorSnackBar";
 import React, {useCallback, useEffect} from "react";
 import {useAppSelector} from "../../store/store";
 import {createTodolist, getTodolists, TodolistEntityType} from "../../state/todoLists-reducer/todolists-reducer";
@@ -40,7 +39,6 @@ export const TodolistList = () => {
             <StyledTodoContainer>
                 {mappedTodoLists}
             </StyledTodoContainer>
-            <ErrorSnackBar/>
         </>
     )
 }

@@ -16,13 +16,13 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
     const dispatch = useDispatch();
     const disabled = task.entityStatus === 'loading';
     const editTaskTitle = useCallback((title: string) => {
-        dispatch(updateTask(todoID, task.id, {title}));
+        dispatch(updateTask({todoID: todoID, taskID: task.id, model: {title} }));
     }, [dispatch, todoID, task.id])
     const changeStatus = useCallback((status: TaskStatuses) => {
-        dispatch(updateTask(todoID, task.id, { status }));
+        dispatch(updateTask({todoID: todoID, taskID: task.id, model: {status} }));
     }, [dispatch, todoID, task.id])
     const removeTask = useCallback(() => {
-        dispatch(deleteTask({todoID, taskID: task.id }));
+        task.id && dispatch(deleteTask({todoID, taskID: task.id }));
     }, [dispatch, todoID, task.id])
 
     const TaskStyle = `${'taskStyle'} ${task.status ? TaskStatuses.Completed : ''}`

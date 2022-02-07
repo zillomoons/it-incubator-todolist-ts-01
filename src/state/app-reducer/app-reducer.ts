@@ -1,76 +1,55 @@
-import {Dispatch} from "redux";
 import {authAPI} from "../../api/todolists-api";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {setIsLoggedIn} from "../auth-reducer/auth-reducer";
 import {preloaderControl} from "../../utils/preloaderControl";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState = {
-    status: 'idle' as RequestStatusType,
-    error: null as string | null,
-    isInitialized: false,
-}
+//Thunk creators
+export const initializeApp = createAsyncThunk(
+    'app/initializeApp',
+    async (param, {dispatch}) => {
+        preloaderControl('loading', dispatch);
+        try {
+            const {data} = await authAPI.me();
+            if (data.resultCode === ResultCodes.success) {
+                dispatch(setIsLoggedIn({value: true}))
+            }
+
+        } catch (e: any) {
+            setAppError({error: e.message});
+        } finally {
+            preloaderControl('idle', dispatch)
+        }
+    }
+)
+
 const slice = createSlice({
     name: 'app',
-    initialState: initialState,
+    initialState: {
+        status: 'idle' as RequestStatusType,
+        error: null as string | null,
+        isInitialized: false,
+    },
     reducers: {
-        setAppError(state, action: PayloadAction<{error: string | null}>){
+        setAppError(state, action: PayloadAction<{ error: string | null }>) {
             state.error = action.payload.error;
         },
-        setAppStatus(state, action: PayloadAction<{status: RequestStatusType}>){
+        setAppStatus(state, action: PayloadAction<{ status: RequestStatusType }>) {
             state.status = action.payload.status;
         },
-        setIsInitialized(state, action: PayloadAction<{isInitialized: boolean}>){
-            state.isInitialized = action.payload.isInitialized;
-        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(initializeApp.fulfilled, (state) => {
+                state.isInitialized = true;
+            })
     }
 })
 export const appReducer = slice.reducer;
 //Action creators
-export const {setAppError, setAppStatus, setIsInitialized} = slice.actions;
+export const {setAppError, setAppStatus} = slice.actions;
 
-//Thunk creators
-export const initializeApp = () => async (dispatch: Dispatch) => {
-    preloaderControl('loading', dispatch);
-    try {
-        const {data} = await authAPI.me();
-        if (data.resultCode === ResultCodes.success) {
-            dispatch(setIsLoggedIn({value: true}))
-        }
-        // else {
-        //     handleServerAppError(dispatch, data)
-        // }
-    } catch (e: any) {
-        setAppError(e.message);
-    } finally {
-        preloaderControl('idle', dispatch)
-        dispatch(setIsInitialized({isInitialized: true}))
-    }
-}
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
-// export type AppInitialStateType = {
-//     status: RequestStatusType
-//     error: string | null
-//     isInitialized: boolean
-// }
-// export type ActionsType = ReturnType<typeof setAppError>
-//     | ReturnType<typeof setAppStatus>
-//     | ReturnType<typeof setIsInitialized>
-//     (state = initialState, action: ActionsType): AppInitialStateType => {
-//     switch (action.type) {
-//         case "APP/SET-ERROR":
-//             return {...state, error: action.error};
-//         case "APP/SET-STATUS":
-//             return {...state, status: action.status};
-//         case "APP/SET-IS-INITIALIZED":
-//             return {...state, isInitialized: action.isInitialized}
-//         default:
-//             return state;
-//     }
-// }
-//Action creators
-// export const setAppError = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const);
-// export const setAppStatus = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
-// export const setIsInitialized = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);
+
