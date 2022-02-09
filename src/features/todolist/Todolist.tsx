@@ -5,20 +5,19 @@ import {Task} from "./task/Task";
 import {TodoTitle} from "../../components/todoListTitle/TodoTitle";
 import {FilterBlock} from "../../components/FilterBlock";
 import styled from "styled-components";
-import {createTask, TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
+import {TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
+import {useActions} from "../../store/store";
+import {tasksActions} from "../../state/tasks-reducer";
 
 
 
 export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
     const dispatch = useDispatch();
     let tasksForToDoList = tasks;
-
-    // useEffect(()=> {
-    //     dispatch(getTasks(todoID));
-    // }, [todoID, dispatch])
+    const {createTask} = useActions(tasksActions);
 
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.New)
@@ -33,8 +32,8 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
         dispatch(updateTodoTitle({todoID, title}));
     }, [dispatch, todoID])
     const addTask = useCallback((title: string) => {
-        dispatch(createTask({todoID, title}));
-    }, [dispatch, todoID])
+       createTask({todoID, title});
+    }, [todoID])
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (

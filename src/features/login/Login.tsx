@@ -1,8 +1,10 @@
 import {useFormik} from "formik";
 import styled from "styled-components";
 import {login} from "../../state/auth-reducer/auth-reducer";
-import { useAppDispatch, useAppSelector} from "../../store/store";
+import { useAppDispatch} from "../../store/store";
 import {Navigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {selectIsLoggedIn} from "./selectors";
 
 export const Login = () => {
     const dispatch = useAppDispatch();
@@ -36,7 +38,7 @@ export const Login = () => {
             // formik.resetForm();
         },
     })
-    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
     if (isLoggedIn) {
         return <Navigate to='/'/>
     }

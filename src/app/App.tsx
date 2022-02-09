@@ -5,15 +5,14 @@ import {TodolistList} from "../features/todolist/TodolistList";
 import {Login} from "../features/login/Login";
 import {Header} from "../components/Header";
 import {initializeApp} from "../state/app-reducer/app-reducer";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../store/store";
+import {useDispatch, useSelector} from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import {ErrorSnackBar} from "../common/ErrorSnackBar";
-
+import {selectIsInitialized} from "./selectors";
 
 const App = () => {
     const dispatch = useDispatch();
-    const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized);
+    const isInitialized = useSelector(selectIsInitialized);
     useEffect(() => {
         dispatch(initializeApp());
     }, [dispatch])

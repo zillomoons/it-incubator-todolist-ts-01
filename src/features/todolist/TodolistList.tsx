@@ -1,17 +1,20 @@
 import React, {useCallback, useEffect} from "react";
-import {useAppSelector} from "../../store/store";
+import { useAppSelector} from "../../store/store";
 import {createTodolist, getTodolists, TodolistEntityType} from "../../state/todoLists-reducer/todolists-reducer";
 import {TaskStateType} from "../../state/tasks-reducer/tasks-reducer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Todolist} from "./Todolist";
 import {Navigate} from "react-router-dom";
 import {AddItemInput} from "../../components/addItemInput/AddItemInput";
 import styled from "styled-components";
+import {authSelectors} from "../login";
+
 
 export const TodolistList = () => {
     const todoLists = useAppSelector<TodolistEntityType[]>(state => state.todoLists);
     const tasks = useAppSelector<TaskStateType>(state => state.tasks);
-    const isLoggedIn = useAppSelector<boolean>(state=> state.auth.isLoggedIn);
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+
     const dispatch = useDispatch();
     const addNewTodoList = useCallback((title: string) => {
         dispatch(createTodolist(title));

@@ -1,9 +1,10 @@
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
-import {getTasks, ResultCodes} from "../tasks-reducer/tasks-reducer";
+import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {getTasks} from "../tasks-reducer/tasks-actions";
 
 
 // Thunk creators

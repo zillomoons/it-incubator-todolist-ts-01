@@ -3,9 +3,10 @@ import {SpanWithEditMode} from "../../../components/spanWithEditMode/SpanWithEdi
 import {Checkbox} from "../../../components/Checkbox";
 import {DeleteButton} from "../../../components/DeleteButton";
 import styled from "styled-components";
-import {deleteTask, TaskEntityType, updateTask} from "../../../state/tasks-reducer/tasks-reducer";
-import {useDispatch} from "react-redux";
+import {TaskEntityType} from "../../../state/tasks-reducer/tasks-reducer";
 import {TaskStatuses} from "../../../api/todolists-api";
+import {useActions} from "../../../store/store";
+import {tasksActions} from "../../../state/tasks-reducer";
 
 type PropsType = {
     todoID: string
@@ -13,17 +14,20 @@ type PropsType = {
 }
 
 export const Task = React.memo(({task, todoID}: PropsType) => {
-    const dispatch = useDispatch();
     const disabled = task.entityStatus === 'loading';
+    const {updateTask, deleteTask} = useActions(tasksActions);// returns thunkCreators wrapped in callback
+
     const editTaskTitle = useCallback((title: string) => {
-        dispatch(updateTask({todoID: todoID, taskID: task.id, model: {title} }));
-    }, [dispatch, todoID, task.id])
+        updateTask({todoID: todoID, taskID: task.id, model: {title}});
+    }, [todoID, task.id]);
+
     const changeStatus = useCallback((status: TaskStatuses) => {
-        dispatch(updateTask({todoID: todoID, taskID: task.id, model: {status} }));
-    }, [dispatch, todoID, task.id])
+        updateTask({todoID: todoID, taskID: task.id, model: {status}});
+    }, [todoID, task.id]);
+
     const removeTask = useCallback(() => {
-        task.id && dispatch(deleteTask({todoID, taskID: task.id }));
-    }, [dispatch, todoID, task.id])
+        task.id && deleteTask({todoID, taskID: task.id});
+    }, [todoID, task.id]);
 
     const TaskStyle = `${'taskStyle'} ${task.status ? TaskStatuses.Completed : ''}`
     return (
@@ -35,7 +39,7 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
             <DeleteButton disabled={disabled} callback={removeTask}/>
         </TaskContainer>
     )
-} );
+});
 
 const TaskContainer = styled.div`
   display: flex;
@@ -46,8 +50,8 @@ const TaskContainer = styled.div`
   border-radius: 10px;
   border: 2px solid lightgrey;
   margin-bottom: 8px;
-  
-  &:hover{
+
+  &:hover {
     background: bisque;
   }
 `
