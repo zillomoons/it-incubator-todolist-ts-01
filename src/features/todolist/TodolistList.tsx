@@ -1,29 +1,30 @@
 import React, {useCallback, useEffect} from "react";
-import { useAppSelector} from "../../store/store";
-import {createTodolist, getTodolists, TodolistEntityType} from "../../state/todoLists-reducer/todolists-reducer";
+import {useActions, useAppSelector} from "../../store/store";
+import {TodolistEntityType} from "../../state/todoLists-reducer/todolists-reducer";
 import {TaskStateType} from "../../state/tasks-reducer/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 import {Todolist} from "./Todolist";
 import {Navigate} from "react-router-dom";
 import {AddItemInput} from "../../components/addItemInput/AddItemInput";
 import styled from "styled-components";
 import {authSelectors} from "../login";
+import {todolistsActions} from "../../state/todoLists-reducer";
 
 
 export const TodolistList = () => {
     const todoLists = useAppSelector<TodolistEntityType[]>(state => state.todoLists);
     const tasks = useAppSelector<TaskStateType>(state => state.tasks);
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+    const {createTodolist, getTodolists} = useActions(todolistsActions); //returns TC wrapped in callback - no need to use dispatch
 
-    const dispatch = useDispatch();
     const addNewTodoList = useCallback((title: string) => {
-        dispatch(createTodolist(title));
-    }, [dispatch]) ;
+        createTodolist(title);
+    }, []) ;
 
     useEffect(() => {
         if (!isLoggedIn) return;
-        dispatch(getTodolists());
-    }, [dispatch, isLoggedIn])
+        getTodolists();
+    }, [isLoggedIn])
 
     const mappedTodoLists = todoLists.map(todo => {
         return <Todolist key={todo.id}

@@ -1,12 +1,11 @@
 import {
     changeEntityStatus,
-    changeFilterAC, createTodolist, deleteTodolist,
-    getTodolists,
-    TodolistEntityType,
-    todolistsReducer, updateTodoTitle
+    changeFilterAC, TodolistEntityType,
+    todolistsReducer
 } from "./todolists-reducer";
 import {TodolistType} from "../../api/todolists-api";
 import {v1} from "uuid";
+import {createTodolist, deleteTodolist, getTodolists, updateTodoTitle} from "./todolists-actions";
 
 let state: TodolistEntityType[];
 

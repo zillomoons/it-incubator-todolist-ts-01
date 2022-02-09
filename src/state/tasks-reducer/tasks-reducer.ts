@@ -1,8 +1,8 @@
-import {createTodolist, deleteTodolist, getTodolists,} from "../todoLists-reducer/todolists-reducer";
 import {RequestStatusType} from "../app-reducer/app-reducer";
 import {TaskType} from "../../api/todolists-api";
 import {createSlice} from "@reduxjs/toolkit";
 import {createTask, deleteTask, getTasks, updateTask} from "./tasks-actions";
+import {createTodolist, deleteTodolist, getTodolists} from "../todoLists-reducer/todolists-actions";
 
 //ResultCode statuses - indicates whether request to server was successful
 export enum ResultCodes {

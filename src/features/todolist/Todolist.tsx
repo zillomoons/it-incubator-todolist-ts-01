@@ -1,23 +1,24 @@
 import React, {useCallback} from "react";
 import {AddItemInput} from "../../components/addItemInput/AddItemInput";
-import {deleteTodolist, FilterValuesType, updateTodoTitle} from "../../state/todoLists-reducer/todolists-reducer";
+import {FilterValuesType} from "../../state/todoLists-reducer/todolists-reducer";
 import {Task} from "./task/Task";
 import {TodoTitle} from "../../components/todoListTitle/TodoTitle";
 import {FilterBlock} from "../../components/FilterBlock";
 import styled from "styled-components";
 import {TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
-import {useDispatch} from "react-redux";
 import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import {useActions} from "../../store/store";
 import {tasksActions} from "../../state/tasks-reducer";
+import {todolistsActions} from "../../state/todoLists-reducer";
 
 
 
 export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
-    const dispatch = useDispatch();
     let tasksForToDoList = tasks;
     const {createTask} = useActions(tasksActions);
+
+    const {deleteTodolist, updateTodoTitle} = useActions(todolistsActions); //returns TC wrapped in callback - no need to use dispatch
 
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.New)
@@ -26,14 +27,14 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.Completed)
     }
     const removeTodoList = useCallback(() => {
-        dispatch(deleteTodolist(todoID));
-    }, [dispatch, todoID])
+        deleteTodolist(todoID);
+    }, [todoID]);
     const editTodoTitle = useCallback((title: string) => {
-        dispatch(updateTodoTitle({todoID, title}));
-    }, [dispatch, todoID])
+        updateTodoTitle({todoID, title});
+    }, [ todoID])
     const addTask = useCallback((title: string) => {
        createTask({todoID, title});
-    }, [todoID])
+    }, [todoID]);
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (

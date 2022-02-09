@@ -1,13 +1,12 @@
 import {tasksReducer, TaskStateType} from "../tasks-reducer/tasks-reducer";
 import {
-    createTodolist, deleteTodolist,
-    getTodolists,
     TodolistEntityType,
     todolistsReducer
 } from "./todolists-reducer";
 import {v1} from "uuid";
 import {TodolistType} from "../../api/todolists-api";
 import {todoListId_1, todoListId_2} from "./todolists-reducer.test";
+import {createTodolist, deleteTodolist, getTodolists} from "./todolists-actions";
 
 test('ids should be equal', ()=> {
     const startTasksState: TaskStateType = {};
