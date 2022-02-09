@@ -1,20 +1,21 @@
 import React from 'react';
 import styled from "styled-components";
 
+
+export const MyButton = React.memo(({name, callback, filter}: PropsType) => {
+    const onClickHandler = () => {
+        callback()
+    }
+    return <StyledFilterBtn onClick={onClickHandler} activeFilter={filter === name}>
+        {name}
+    </StyledFilterBtn>
+})
+
 type PropsType = {
     name: string
     callback: () => void
     filter?: string
 }
-
-export const MyButton = React.memo(({name, callback, ...props}: PropsType) => {
-    const onClickHandler = () => {
-        callback()
-    }
-    return <StyledFilterBtn onClick={onClickHandler} activeFilter={props.filter === name}>
-        {name}
-    </StyledFilterBtn>
-})
 
 const StyledFilterBtn = styled.button<{activeFilter : boolean}>`
   width: 100px;

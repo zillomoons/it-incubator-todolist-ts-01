@@ -1,11 +1,11 @@
 import {
+    asyncActions,
     changeEntityStatus,
-    changeFilterAC, TodolistEntityType,
-    todolistsReducer
+    changeFilter, TodolistEntityType,
+    todolistsReducer,
 } from "./todolists-reducer";
 import {TodolistType} from "../../api/todolists-api";
 import {v1} from "uuid";
-import {createTodolist, deleteTodolist, getTodolists, updateTodoTitle} from "./todolists-actions";
 
 let state: TodolistEntityType[];
 
@@ -21,7 +21,7 @@ beforeEach(()=> {
 
 test('todolist reducer should remove correct todolist', ()=> {
 
-    let changedState = todolistsReducer(state, deleteTodolist.fulfilled({todoID: todoListId_1}, '', todoListId_1))
+    let changedState = todolistsReducer(state, asyncActions.deleteTodolist.fulfilled({todoID: todoListId_1}, '', todoListId_1))
 
     expect(changedState.length).toBe(1)
     expect(changedState[0].id).toBe(todoListId_2)
@@ -29,7 +29,7 @@ test('todolist reducer should remove correct todolist', ()=> {
 })
 test('todolist reducer should edit correct todolist title', ()=> {
     const update = {todoID: todoListId_2, title: 'What to search'};
-    let changedState = todolistsReducer(state, updateTodoTitle.fulfilled(update, '', update ))
+    let changedState = todolistsReducer(state, asyncActions.updateTodoTitle.fulfilled(update, '', update ))
 
     expect(changedState.length).toBe(2)
     expect(changedState[0].title).toBe('What to learn')
@@ -40,7 +40,7 @@ test('todolist reducer should add new todo with correct title', ()=> {
     let newTodo = {
         id:"dc67d646-68bd-4ec5-94d3-93bad218c53a",title:"What to watch",addedDate:"2021-12-16T19:30:45.9613775Z",order:-7
     }
-    let changedState = todolistsReducer(state, createTodolist.fulfilled({tl: newTodo}, '', newTodo.title))
+    let changedState = todolistsReducer(state, asyncActions.createTodolist.fulfilled({tl: newTodo}, '', newTodo.title))
 
     expect(changedState.length).toBe(3)
     expect(changedState[1].title).toBe('What to learn')
@@ -48,7 +48,7 @@ test('todolist reducer should add new todo with correct title', ()=> {
 })
 test('todolist reducer should change filter correctly', ()=> {
 
-    let changedState = todolistsReducer(state, changeFilterAC({todoID: todoListId_2, value: "completed" }))
+    let changedState = todolistsReducer(state, changeFilter({todoID: todoListId_2, value: "completed" }))
 
     expect(changedState.length).toBe(2)
     expect(changedState[1].filter).toBe('completed')
@@ -61,7 +61,7 @@ test('todolist reducer should set todolists with filter to the state ', () => {
         {id: '1', title: 'What to read', addedDate: '', order: 0},
         {id: '3', title: 'What to watch', addedDate: '', order: 0},
     ]
-    const endState = todolistsReducer(state, getTodolists.fulfilled({todolists}, ''))
+    const endState = todolistsReducer(state, asyncActions.getTodolists.fulfilled({todolists}, ''))
 
     expect(endState.length).toBe(3)
     expect(endState[0].id).toBe('2')

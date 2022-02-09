@@ -1,12 +1,13 @@
 import {tasksReducer, TaskStateType} from "../tasks-reducer/tasks-reducer";
 import {
+    asyncActions,
+
     TodolistEntityType,
     todolistsReducer
 } from "./todolists-reducer";
 import {v1} from "uuid";
 import {TodolistType} from "../../api/todolists-api";
 import {todoListId_1, todoListId_2} from "./todolists-reducer.test";
-import {createTodolist, deleteTodolist, getTodolists} from "./todolists-actions";
 
 test('ids should be equal', ()=> {
     const startTasksState: TaskStateType = {};
@@ -14,7 +15,7 @@ test('ids should be equal', ()=> {
     let newTodo = {
         id:"dc67d646-68bd-4ec5-94d3-93bad218c53a",title:"new toys",addedDate:"2021-12-16T19:30:45.9613775Z",order:-7
     }
-    const action = createTodolist.fulfilled({tl: newTodo}, '', newTodo.title)
+    const action = asyncActions.createTodolist.fulfilled({tl: newTodo}, '', newTodo.title)
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todolistsReducer(startTodoListsState, action)
 
@@ -70,7 +71,7 @@ test('property with todoID should be deleted from Tasks state', ()=>{
                 addedDate: ''},
         ]
     }
-    const action = deleteTodolist.fulfilled({todoID: todoListId_2}, '',  todoListId_2);
+    const action = asyncActions.deleteTodolist.fulfilled({todoID: todoListId_2}, '',  todoListId_2);
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)
@@ -84,7 +85,7 @@ test('empty arrays should be added when we set todolists', ()=> {
         {id: '1', title: 'What to read', addedDate: '', order: 0},
         {id: '3', title: 'What to watch', addedDate: '', order: 0},
     ]
-    const endState = tasksReducer({}, getTodolists.fulfilled({todolists}, ''))
+    const endState = tasksReducer({}, asyncActions.getTodolists.fulfilled({todolists}, ''))
 
     const keys = Object.keys(endState)
 

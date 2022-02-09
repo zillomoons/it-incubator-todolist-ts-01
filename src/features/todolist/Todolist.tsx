@@ -10,15 +10,11 @@ import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import {useActions} from "../../store/store";
 import {tasksActions} from "../../state/tasks-reducer";
-import {todolistsActions} from "../../state/todoLists-reducer";
-
 
 
 export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
     let tasksForToDoList = tasks;
     const {createTask} = useActions(tasksActions);
-
-    const {deleteTodolist, updateTodoTitle} = useActions(todolistsActions); //returns TC wrapped in callback - no need to use dispatch
 
     if (filter === 'active') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.New)
@@ -26,20 +22,15 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
     if (filter === 'completed') {
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.Completed)
     }
-    const removeTodoList = useCallback(() => {
-        deleteTodolist(todoID);
-    }, [todoID]);
-    const editTodoTitle = useCallback((title: string) => {
-        updateTodoTitle({todoID, title});
-    }, [ todoID])
+
     const addTask = useCallback((title: string) => {
-       createTask({todoID, title});
+        createTask({todoID, title});
     }, [todoID]);
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (
         <StyledTodolist>
-            <TodoTitle title={title} editTodoTitle={editTodoTitle} disabled={todoEntityStatus === 'loading'} removeTodoList={removeTodoList}/>
+            <TodoTitle todoID={todoID} title={title} disabled={todoEntityStatus === 'loading'}/>
             <AddItemInput addNewItemTitle={addTask} disabled={todoEntityStatus === 'loading'}/>
             {mappedTasks}
             <FilterBlock filter={filter} todoID={todoID}/>

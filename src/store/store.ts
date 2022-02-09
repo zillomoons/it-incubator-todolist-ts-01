@@ -33,7 +33,7 @@ export function useActions<T extends ActionCreatorsMapObject>(actions: T){
     const dispatch = useAppDispatch();
 
     return useMemo(()=>{
-        return bindActionCreators(actions, dispatch);
+         return bindActionCreators(actions, dispatch);
     }, [])
 
 }

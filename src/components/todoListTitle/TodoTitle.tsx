@@ -1,19 +1,25 @@
 import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
-import React from "react";
+import React, {useCallback} from "react";
 import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
+import {useActions} from "../../store/store";
+import {todolistsActions} from "../../state/todoLists-reducer";
 
 type PropsType = {
     title: string
-    editTodoTitle: (title: string) => void
-    removeTodoList: () => void
     disabled: boolean
+    todoID: string
 }
 
-export const TodoTitle = React.memo(({title, editTodoTitle, removeTodoList ,disabled}: PropsType) => {
+export const TodoTitle = React.memo(({title, todoID, disabled}: PropsType) => {
+    const {deleteTodolist, updateTodoTitle} = useActions(todolistsActions);
+    const editTodolistTitle = useCallback((title: string) => {
+        updateTodoTitle({todoID, title})
+    }, [todoID]);
+    const removeTodolist = useCallback(()=>deleteTodolist(todoID), [todoID]);
     return <TodoTitleStyled>
-        <SpanWithEditMode title={title} disabled={disabled} editTitle={editTodoTitle}/>
-        <DeleteButton disabled={disabled} callback={removeTodoList}/>
+        <SpanWithEditMode title={title} disabled={disabled} editTitle={editTodolistTitle}/>
+        <DeleteButton disabled={disabled} callback={removeTodolist}/>
     </TodoTitleStyled>
 })
 

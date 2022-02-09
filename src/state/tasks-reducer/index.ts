@@ -1,3 +1,6 @@
-import * as tasksActions from './tasks-actions';
+import {asyncActions as tasksAsyncActions, slice} from './tasks-reducer';
 
-export {tasksActions};
+export const tasksActions = {
+    ...tasksAsyncActions,
+    ...slice.actions
+};

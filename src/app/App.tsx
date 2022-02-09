@@ -1,21 +1,24 @@
 import React, {useEffect} from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
-import './App.css';
-import {TodolistList} from "../features/todolist/TodolistList";
-import {Login} from "../features/login/Login";
-import {Header} from "../components/Header";
-import {initializeApp} from "../state/app-reducer/app-reducer";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import {ErrorSnackBar} from "../common/ErrorSnackBar";
+
+import './App.css';
+import {TodolistList} from "../features/todolist";
+import {Login} from "../features/login";
+import {Header} from "../components";
+
+import {ErrorSnackBar} from "../common";
 import {selectIsInitialized} from "./selectors";
+import {useActions} from "../store/store";
+import {appActions} from "../state/app-reducer";
 
 const App = () => {
-    const dispatch = useDispatch();
     const isInitialized = useSelector(selectIsInitialized);
+    const {initializeApp} = useActions(appActions);
     useEffect(() => {
-        dispatch(initializeApp());
-    }, [dispatch])
+       initializeApp();
+    }, [])
 
     if (!isInitialized){
         return <div style={{position: 'fixed', top: '30%', textAlign: "center", width: '100%'}}>

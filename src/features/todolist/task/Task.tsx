@@ -20,11 +20,9 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
     const editTaskTitle = useCallback((title: string) => {
         updateTask({todoID: todoID, taskID: task.id, model: {title}});
     }, [todoID, task.id]);
-
     const changeStatus = useCallback((status: TaskStatuses) => {
         updateTask({todoID: todoID, taskID: task.id, model: {status}});
     }, [todoID, task.id]);
-
     const removeTask = useCallback(() => {
         task.id && deleteTask({todoID, taskID: task.id});
     }, [todoID, task.id]);

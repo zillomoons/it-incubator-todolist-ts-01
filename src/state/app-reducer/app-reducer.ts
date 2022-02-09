@@ -22,7 +22,7 @@ export const initializeApp = createAsyncThunk(
         }
     })
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'app',
     initialState: {
         status: 'idle' as RequestStatusType,
