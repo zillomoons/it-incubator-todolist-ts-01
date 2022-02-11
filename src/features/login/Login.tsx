@@ -1,10 +1,10 @@
 import {useFormik} from "formik";
 import styled from "styled-components";
-import {login} from "../../state/auth-reducer/auth-reducer";
-import { useAppDispatch} from "../../store/store";
+import {useAppDispatch} from "../../store/store";
 import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {selectIsLoggedIn} from "./selectors";
+import {authActions} from "../../state/auth-reducer";
 
 export const Login = () => {
     const dispatch = useAppDispatch();
@@ -27,13 +27,12 @@ export const Login = () => {
             return errors;
         },
         onSubmit: async (values, formikHelpers) => {
-            const action = await dispatch(login(values));
-            if (login.rejected.match(action)){
+            const action = await dispatch(authActions.login(values));
+            if (authActions.login.rejected.match(action)){
                 if(action.payload?.fieldsErrors?.length){
                     const error = action.payload?.fieldsErrors[0];
                     formikHelpers.setFieldError(error.field, error.error)
                 }
-
             }
             // formik.resetForm();
         },
@@ -88,7 +87,8 @@ export const StyledFormContainer = styled.div`
   border: none;
   border-radius: 8px;
   box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
-  padding: 10px 8px;
+  padding: 10px;
+  background: white;
 `
 const StyledForm = styled.form`
   display: flex;
@@ -110,13 +110,15 @@ const StyledCheckboxLabel = styled.label`
   margin-bottom: 10px;
 `
 const StyledInfo = styled.div`
-  background: lightblue;
+  background: #00BF72FF;
   border-radius: 5px;
-  padding: 3px 5px;
+  padding: 10px;
+  color: white;
+  font-size: 14px;
 `
 const StyledLoginBtn = styled.button`
   margin: 15px;
-  background: darkcyan;
+  background: #00BF72FF;;
   color: white;
   font-weight: bold;
   border: none;

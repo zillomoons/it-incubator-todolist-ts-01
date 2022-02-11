@@ -72,7 +72,7 @@ test('tasksReducer should add task with correct title in correct todolist', ()=>
         order: 1,
         addedDate: ''
     }
-    let changedState = tasksReducer(startState, asyncActions.createTask.fulfilled({task}, 'requiredId', {todoID: task.todoListId, title: task.title}))
+    let changedState = tasksReducer(startState, asyncActions.createTask.fulfilled(task, 'requiredId', {todoID: task.todoListId, title: task.title}))
 
     expect(changedState[todoListId_1].length).toBe(3);
     expect(changedState[todoListId_1][0].title).toBe('NodeJS')

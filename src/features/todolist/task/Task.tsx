@@ -27,9 +27,9 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
         task.id && deleteTask({todoID, taskID: task.id});
     }, [todoID, task.id]);
 
-    const TaskStyle = `${'taskStyle'} ${task.status ? TaskStatuses.Completed : ''}`
+    const taskStyle = task.status ? {opacity: '0.7'} : {};
     return (
-        <TaskContainer className={TaskStyle}>
+        <TaskContainer style={taskStyle}>
             <label>
                 <Checkbox status={task.status} changeStatus={changeStatus}/>
             </label>
@@ -41,15 +41,16 @@ export const Task = React.memo(({task, todoID}: PropsType) => {
 
 const TaskContainer = styled.div`
   display: flex;
-  padding: 3px 5px;
+  padding: 3px 10px;
   justify-content: space-between;
-  align-items: center;
-  width: 250px;
+  align-items: baseline;
+  width: 100%;
   border-radius: 10px;
   border: 2px solid lightgrey;
-  margin-bottom: 8px;
+  margin: 0 15px 10px;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
-    background: bisque;
+    background: rgba(211, 211, 211, 0.44);
   }
 `

@@ -17,7 +17,7 @@ export const Header = React.memo(() => {
     return (
         <>
             <StyledHeaderContainer>
-                <h3 style={{marginLeft: '15px'}}>Todo App</h3>
+                <StyledLogo>To do App</StyledLogo>
                 {isLoggedIn && <StyledLogout onClick={onLogout}><span>Logout</span> <AiOutlineLogout /></StyledLogout>}
             </StyledHeaderContainer>
             {status === 'loading' && <LinearProgress color='secondary'/>}
@@ -27,19 +27,24 @@ export const Header = React.memo(() => {
 })
 const StyledHeaderContainer = styled.div`
   height: 60px;
-  background: darkcyan;
+  background: transparent;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `
 const StyledLogout = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 20px;
   display: flex;
+  align-items: flex-end;
   gap: 5px;
   margin: 0 15px;
   background: white;
   color: darkcyan;
   font-weight: bold;
+  font-size: 14px;
   border: none;
   padding: 5px 15px;
   border-radius: 15px;
@@ -51,4 +56,9 @@ const StyledLogout = styled.button`
     box-shadow: 0 5px 10px 5px rgba(255, 255, 147, 0.25);
     transform: translateY(-1px);
   }
+`
+const StyledLogo = styled.h3`
+  position: fixed;
+  top: 15px;
+  left: 15px;
 `

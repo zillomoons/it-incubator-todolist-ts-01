@@ -15,7 +15,7 @@ test('ids should be equal', ()=> {
     let newTodo = {
         id:"dc67d646-68bd-4ec5-94d3-93bad218c53a",title:"new toys",addedDate:"2021-12-16T19:30:45.9613775Z",order:-7
     }
-    const action = asyncActions.createTodolist.fulfilled({tl: newTodo}, '', newTodo.title)
+    const action = asyncActions.createTodolist.fulfilled(newTodo, '', newTodo.title)
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todolistsReducer(startTodoListsState, action)
 
@@ -23,8 +23,8 @@ test('ids should be equal', ()=> {
     const idFromTasks = keys[0]
     const idFromTodoList = endTodoListsState[0].id
 
-    expect(idFromTasks).toBe(action.payload.tl.id)
-    expect(idFromTodoList).toBe(action.payload.tl.id)
+    expect(idFromTasks).toBe(action.payload.id)
+    expect(idFromTodoList).toBe(action.payload.id)
 })
 test('property with todoID should be deleted from Tasks state', ()=>{
     const startState: TaskStateType = {

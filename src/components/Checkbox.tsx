@@ -9,9 +9,7 @@ type PropsType = {
 
 export const Checkbox = React.memo(({status, changeStatus}: PropsType) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        e.currentTarget.checked
-            ? changeStatus(TaskStatuses.Completed)
-            : changeStatus(TaskStatuses.New)
+        changeStatus(e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New)
     }
     return (
         <CheckboxContainer>
@@ -47,12 +45,12 @@ const StyledCheckbox = styled.div<{ checked: boolean }>`
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: ${props => props.checked ? 'salmon' : 'papayawhip'};
+  background: ${props => props.checked ? 'linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12)' : 'rgba(203,243,222,0.4)'};
   border-radius: 50%;
   transition: all 150ms;
 
   ${HiddenCheckbox}:focus + & {
-    box-shadow: 0 0 0 3px pink;
+    box-shadow: 0 0 0 1px #7cf5c4;
   }
 
   ${Icon} {

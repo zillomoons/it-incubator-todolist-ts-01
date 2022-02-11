@@ -40,7 +40,7 @@ test('todolist reducer should add new todo with correct title', ()=> {
     let newTodo = {
         id:"dc67d646-68bd-4ec5-94d3-93bad218c53a",title:"What to watch",addedDate:"2021-12-16T19:30:45.9613775Z",order:-7
     }
-    let changedState = todolistsReducer(state, asyncActions.createTodolist.fulfilled({tl: newTodo}, '', newTodo.title))
+    let changedState = todolistsReducer(state, asyncActions.createTodolist.fulfilled( newTodo, '', newTodo.title))
 
     expect(changedState.length).toBe(3)
     expect(changedState[1].title).toBe('What to learn')

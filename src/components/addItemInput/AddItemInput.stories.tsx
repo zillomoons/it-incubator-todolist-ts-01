@@ -12,10 +12,14 @@ export default {
     },
 } as ComponentMeta<typeof AddItemInput>;
 
+const asyncCallback = async (...params: any[]) => {
+    return action('Button inside form clicked', ...params)
+}
+
 const Template: ComponentStory<typeof AddItemInput> = (args) => <AddItemInput {...args} />;
 
 export const AddItemInputExample = Template.bind({});
 AddItemInputExample.args = {
-    addNewItemTitle: action('Button inside form clicked')
+    addNewItemTitle: asyncCallback
 };
 

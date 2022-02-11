@@ -1,8 +1,7 @@
-import React, {useCallback} from "react";
+import React, { useCallback, useState} from "react";
 import styled from "styled-components";
 
 import {
-    AddItemInput,
     TodoTitle,
     FilterBlock
 } from "../../components";
@@ -13,11 +12,11 @@ import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import {tasksActions} from "../../state/tasks-reducer";
 import {useAppDispatch} from "../../store/store";
+import {AddItemInputControlled} from "../../components/addItemInput/AddItemInputControlled";
 
 
-export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
+export const TodolistWithCtrlAddItemInput = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {
     const dispatch = useAppDispatch();
-
     let tasksForToDoList = tasks;
 
     if (filter === 'active') {
@@ -27,23 +26,34 @@ export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntitySta
         tasksForToDoList = tasksForToDoList.filter(t => t.status === TaskStatuses.Completed)
     }
 
+    //AddItemInput control
     const addTask = useCallback(async (title: string) => {
         const action = await dispatch(tasksActions.createTask({todoID, title}));
-        if (tasksActions.createTask.rejected.match(action)){
-            if(action.payload?.errors?.length){
-                const error = action.payload?.errors[0];
-                throw new Error(error)
+        if (tasksActions.createTask.rejected.match(action)) {
+            if (action.payload?.errors?.length) {
+                const errorMessage = action.payload?.errors[0];
+                setError(errorMessage);
             } else {
-                throw new Error('Some error occured')
+                setError('Some error occured')
             }
+        } else {
+            setNewTitle('');
         }
-    }, [todoID]);
+    }, []);
+    const [newTitle, setNewTitle] = useState('');
+    const [error, setError] = useState('');
 
     const mappedTasks = tasksForToDoList.map((t) => <Task key={t.id} todoID={todoID} task={t}/>)
     return (
         <StyledTodolist>
             <TodoTitle todoID={todoID} title={title} disabled={todoEntityStatus === 'loading'}/>
-            <AddItemInput addNewItemTitle={addTask} disabled={todoEntityStatus === 'loading'}/>
+            <AddItemInputControlled
+                addNewItemTitle={addTask}
+                error={error}
+                newTitle={newTitle}
+                setError={setError}
+                setNewTitle={setNewTitle}
+                disabled={todoEntityStatus === 'loading'}/>
             {mappedTasks}
             {!mappedTasks.length && <div style={{color: "lightgray"}}>No tasks added</div>}
             <FilterBlock filter={filter} todoID={todoID}/>

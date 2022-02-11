@@ -4,6 +4,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes, asyncActions as todolistsAsyncActions} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
+import {ThunkErrorType} from "../../store/store";
 
 
 const getTodolists = createAsyncThunk(
@@ -25,21 +26,21 @@ const getTodolists = createAsyncThunk(
             preloaderControl('idle', dispatch)
         }
     })
-const createTodolist = createAsyncThunk(
+const createTodolist = createAsyncThunk<TodolistType, string, ThunkErrorType >(
     'todolists/createTodolist',
-    async (title: string, {dispatch, rejectWithValue}) => {
+    async (title, {dispatch, rejectWithValue}) => {
         preloaderControl('loading', dispatch);
         try {
             const {data} = await todolistsAPI.createTodolist(title);
             if (data.resultCode === ResultCodes.success) {
-                return {tl: data.data.item};
+                return data.data.item;
             } else {
-                handleServerAppError(dispatch, data);
-                return rejectWithValue(null);
+                // handleServerAppError(dispatch, data);
+                return rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors});
             }
         } catch (error: any) {
             dispatch(setAppError({error: error.message}));
-            return rejectWithValue(null);
+            return rejectWithValue({errors: [error.message], fieldsErrors: undefined});
         } finally {
             preloaderControl('idle', dispatch);
         }
@@ -67,7 +68,7 @@ const deleteTodolist = createAsyncThunk(
 const updateTodoTitle = createAsyncThunk(
     'todolists, updateTodolist',
     async (param: { todoID: string, title: string }, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch);
+        preloaderControl('loading', dispatch, param.todoID);
         try {
             const {data} = await todolistsAPI.updateTodolist(param.todoID, param.title);
             if (data.resultCode === ResultCodes.success) {
@@ -80,7 +81,7 @@ const updateTodoTitle = createAsyncThunk(
             dispatch(setAppError({error: error.message}));
             return rejectWithValue(null);
         } finally {
-            preloaderControl('idle', dispatch);
+            preloaderControl('idle', dispatch, param.todoID);
         }
     })
 
@@ -110,7 +111,7 @@ export const slice = createSlice({
                 return action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
             })
             .addCase(createTodolist.fulfilled, (state, action) => {
-                state.unshift({...action.payload.tl, filter: 'all', entityStatus: 'idle'})
+                state.unshift({...action.payload, filter: 'all', entityStatus: 'idle'})
             })
             .addCase(deleteTodolist.fulfilled, (state, action) => {
                 const index = state.findIndex(tl => tl.id === action.payload.todoID);

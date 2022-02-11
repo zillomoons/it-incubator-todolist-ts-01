@@ -1,23 +1,34 @@
 import React, {useCallback, useEffect} from "react";
-import {useActions} from "../../store/store";
 import {useSelector} from "react-redux";
-import {Todolist} from "./Todolist";
 import {Navigate} from "react-router-dom";
-import {AddItemInput} from "../../components/addItemInput/AddItemInput";
 import styled from "styled-components";
+
+import {useActions, useAppDispatch} from "../../store/store";
+import {Todolist} from "./Todolist";
+import {AddItemInput} from "../../components";
 import {authSelectors} from "../login";
 import {todolistsActions} from "../../state/todoLists-reducer";
 import {selectTasks, selectTodoLists} from "./selectors";
 
 
 export const TodolistList = () => {
+    const dispatch = useAppDispatch();
     const todoLists = useSelector(selectTodoLists);
     const tasks = useSelector(selectTasks);
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
-    const {createTodolist, getTodolists} = useActions(todolistsActions); //returns TC wrapped in callback - no need to use dispatch
+    const {getTodolists} = useActions(todolistsActions); //returns TC wrapped in callback - no need to use dispatch
 
-    const addNewTodoList = useCallback((title: string) => {
-        createTodolist(title);
+    const addNewTodoList = useCallback(async (title: string) => {
+        // createTodolist(title);
+        const action = await dispatch(todolistsActions.createTodolist(title));
+        if (todolistsActions.createTodolist.rejected.match(action)){
+            if(action.payload?.errors?.length){
+                const error = action.payload?.errors[0];
+                throw new Error(error)
+            } else {
+                throw new Error('Some error occured')
+            }
+        }
     }, []) ;
 
     useEffect(() => {
@@ -39,7 +50,9 @@ export const TodolistList = () => {
     }
     return (
         <>
-            <AddItemInput addNewItemTitle={addNewTodoList} />
+            <div style={{width: '280px', margin: '50px auto'}}>
+                <AddItemInput style={{color: 'white'}} addNewItemTitle={addNewTodoList} />
+            </div>
             <StyledTodoContainer>
                 {mappedTodoLists}
             </StyledTodoContainer>
@@ -49,8 +62,8 @@ export const TodolistList = () => {
 const StyledTodoContainer = styled.div`
   padding: 30px;
   display: flex;
-  flex-wrap: wrap;
   gap: 30px;
   align-items: flex-start;
-  justify-content: space-evenly;
+  
 `
+

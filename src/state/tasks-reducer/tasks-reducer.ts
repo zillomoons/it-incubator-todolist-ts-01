@@ -1,10 +1,12 @@
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+
 import {RequestStatusType, setAppError, setAppStatus} from "../app-reducer/app-reducer";
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {asyncActions as todolistsAsyncActions} from '../todoLists-reducer/todolists-reducer'
+import {asyncActions as todolistsActions} from '../todoLists-reducer/todolists-reducer'
 import {preloaderControl} from "../../utils/preloaderControl";
 import {handleServerAppError} from "../../utils/error-utils";
-import {AppRootStateType} from "../../store/store";
+import {AppRootStateType, ThunkErrorType} from "../../store/store";
+
 
 //ResultCode statuses - indicates whether request to server was successful
 export enum ResultCodes {
@@ -17,7 +19,7 @@ export enum ResultCodes {
 const getTasks = createAsyncThunk(
     'tasks/fetchTasks',
     async (todoID: string, thunkAPI) => {
-        thunkAPI.dispatch(setAppStatus({status: 'loading'}))
+        preloaderControl('loading', thunkAPI.dispatch);
         try {
             const {data} = await todolistsAPI.getTasks(todoID);
             return {todoID, tasks: data.items};
@@ -49,23 +51,22 @@ const deleteTask = createAsyncThunk(
             preloaderControl('idle', thunkAPI.dispatch, param.todoID, param.taskID)
         }
     })
-const createTask = createAsyncThunk(
+const createTask = createAsyncThunk<TaskType, { todoID: string, title: string }, ThunkErrorType>(
     'tasks/createTask',
-    async (param: { todoID: string, title: string }, {dispatch, rejectWithValue}) => {
+    async (param, {dispatch, rejectWithValue}) => {
         preloaderControl('loading', dispatch, param.todoID);
 
         try {
             const {data} = await todolistsAPI.createTask(param.todoID, param.title)
             if (data.resultCode === ResultCodes.success) {
-                return {task: data.data.item};
+                return data.data.item;
             } else {
-                handleServerAppError(dispatch, data);
-                //should be replaced with more suitable action.payload
-                return rejectWithValue(null)
+                // handleServerAppError(dispatch, data);
+                return rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}));
-            return rejectWithValue(null)
+            dispatch(setAppError({error: error.message})); // error will be handled locally
+            return rejectWithValue({errors: [error.message], fieldsErrors: undefined})
         } finally {
             preloaderControl('idle', dispatch, param.todoID);
         }
@@ -129,13 +130,13 @@ export const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(todolistsAsyncActions.createTodolist.fulfilled, (state, action) => {
-                state[action.payload.tl.id] = [];
+            .addCase(todolistsActions.createTodolist.fulfilled, (state, action) => {
+                state[action.payload.id] = [];
             })
-            .addCase(todolistsAsyncActions.deleteTodolist.fulfilled, (state, action) => {
+            .addCase(todolistsActions.deleteTodolist.fulfilled, (state, action) => {
                 delete state[action.payload.todoID];
             })
-            .addCase(todolistsAsyncActions.getTodolists.fulfilled, (state, action) => {
+            .addCase(todolistsActions.getTodolists.fulfilled, (state, action) => {
                 action.payload.todolists.forEach(tl => state[tl.id] = []);
             })
             .addCase(getTasks.fulfilled, (state, action) => {
@@ -147,8 +148,8 @@ export const slice = createSlice({
                 if (index > -1) tasks.splice(index, 1);
             })
             .addCase(createTask.fulfilled, (state, action) => {
-                const tlId = action.payload.task.todoListId;
-                state[tlId].unshift({...action.payload.task, entityStatus: 'idle'})
+                const tlId = action.payload.todoListId;
+                state[tlId].unshift({...action.payload, entityStatus: 'idle'})
             })
             .addCase(updateTask.fulfilled, (state, action) => {
                 const tlId = action.payload.todoID;

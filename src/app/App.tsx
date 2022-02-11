@@ -17,12 +17,12 @@ const App = () => {
     const isInitialized = useSelector(selectIsInitialized);
     const {initializeApp} = useActions(appActions);
     useEffect(() => {
-       initializeApp();
+        initializeApp();
     }, [])
 
-    if (!isInitialized){
+    if (!isInitialized) {
         return <div style={{position: 'fixed', top: '30%', textAlign: "center", width: '100%'}}>
-            <CircularProgress />
+            <CircularProgress/>
         </div>
     }
     return (
@@ -41,3 +41,5 @@ const App = () => {
 };
 
 export default App;
+
+

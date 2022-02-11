@@ -24,7 +24,12 @@ export const TodoTitle = React.memo(({title, todoID, disabled}: PropsType) => {
 })
 
 const TodoTitleStyled = styled.h3`
+  width: 100%;
   display: flex;
+  line-height: 1.2;
   align-items: baseline;
-  justify-content: flex-start;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 0 10px;
+  font-size: 16px;
 `

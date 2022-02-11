@@ -35,14 +35,15 @@ export const SpanWithEditMode = React.memo(({title, editTitle, disabled}: PropsT
 });
 const StyledInput = styled.input`
   display: inline;
-  margin: 0;
   width: 180px;
   outline: none;
   border: none;
   color: lightslategrey;
 `
 const StyledSpan = styled.div`
-  word-wrap: break-word;
+  text-align: left;
+  width: 100%;
   overflow-wrap: break-word;
+  hyphens: auto;
 `
 

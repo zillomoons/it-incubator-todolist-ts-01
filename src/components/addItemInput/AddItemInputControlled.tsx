@@ -1,13 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent} from "react";
 import styled from "styled-components";
 import {StyledIconButton} from "../DeleteButton";
 import {IoAddCircleOutline} from "react-icons/all";
 
 
-export const AddItemInput = React.memo(({addNewItemTitle, disabled, style}: PropsType) => {
-    const [newTitle, setNewTitle] = useState('');
-    const [error, setError] = useState('');
-
+export const AddItemInputControlled = React.memo(({addNewItemTitle, disabled, style, newTitle, error, setNewTitle, setError}: PropsType) => {
     const onNewTaskChanged = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(event.currentTarget.value)
     }
@@ -15,20 +12,17 @@ export const AddItemInput = React.memo(({addNewItemTitle, disabled, style}: Prop
         error && setError('');
         e.key === 'Enter' && addNewTitle()
     }
-    const addNewTitle = async() => {
-        const trimmedTitle = newTitle.trim();
-        if (trimmedTitle) {
+    const addNewTitle = () => {
+        // const trimmedTitle = newTitle.trim();
+        if (newTitle.trim()) {
             error && setError('');
-            try {
-                await addNewItemTitle(trimmedTitle);
-                setNewTitle('')
-            } catch (err:any) {
-                setError(err.message)
-            }
+            addNewItemTitle(newTitle.trim());
         } else {
             setError('Title is required')
         }
     }
+
+
     return (
         <StyledInputContainer>
             <div>
@@ -69,4 +63,8 @@ type PropsType = {
     addNewItemTitle: (title: string) => Promise<any>
     disabled?: boolean
     style?: Object
+    error: string
+    newTitle: string
+    setError: (error: string)=> void
+    setNewTitle: (value: string) => void
 }
