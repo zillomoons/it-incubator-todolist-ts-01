@@ -1,6 +1,6 @@
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes, asyncActions as todolistsAsyncActions} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
@@ -124,7 +124,7 @@ export const slice = createSlice({
     }
 })
 
-export const todolistsReducer = slice.reducer;
+// export const todolistsReducer = slice.reducer;
 //Action creators
 export const {changeFilter, changeEntityStatus} = slice.actions;
 

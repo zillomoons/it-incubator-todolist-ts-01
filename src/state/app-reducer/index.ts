@@ -1,6 +1,11 @@
 import {initializeApp, slice} from './app-reducer';
 
-export const appActions = {
+const appReducer = slice.reducer;
+const appActions = {
     ...slice.actions,
     initializeApp,
+}
+export {
+    appActions,
+    appReducer
 }

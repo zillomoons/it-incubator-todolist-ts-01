@@ -47,9 +47,9 @@ export const logout = createAsyncThunk(
         }
     })
 
-export const authActions = {login, logout}
+export const asyncActions = {login, logout}
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'auth',
     initialState: {
         isLoggedIn: false,

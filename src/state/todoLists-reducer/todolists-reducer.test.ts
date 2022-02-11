@@ -2,10 +2,10 @@ import {
     asyncActions,
     changeEntityStatus,
     changeFilter, TodolistEntityType,
-    todolistsReducer,
 } from "./todolists-reducer";
 import {TodolistType} from "../../api/todolists-api";
 import {v1} from "uuid";
+import {todolistsReducer} from "./index";
 
 let state: TodolistEntityType[];
 
