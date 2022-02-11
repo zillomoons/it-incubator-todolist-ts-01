@@ -1,12 +1,13 @@
-import {authAPI, FieldErrorType, LoginParamsType} from "../../api/todolists-api";
+import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {setAppError} from "../app-reducer/app-reducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {ThunkErrorType} from "../../store/store";
 
 //RTK asyncThunks
-export const login = createAsyncThunk<undefined, LoginParamsType, { rejectValue: { errors: string[]; fieldsErrors?: FieldErrorType[] } }>(
+export const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
         'auth/login',
     async (param, thunkAPI) => {
         preloaderControl('loading', thunkAPI.dispatch);
