@@ -2,8 +2,8 @@ import {SpanWithEditMode} from "../spanWithEditMode/SpanWithEditMode";
 import React, {useCallback} from "react";
 import {DeleteButton} from "../DeleteButton";
 import styled from "styled-components";
-import {useActions} from "../../store/store";
 import {todolistsActions} from "../../state/todoLists-reducer";
+import {useActions} from "../../store/redux-utils";
 
 type PropsType = {
     title: string

@@ -1,9 +1,9 @@
 import React from "react"
 import {MyButton} from "./Button";
 import {FilterValuesType} from "../state/todoLists-reducer/todolists-reducer";
-import {useActions} from "../store/store";
 import {todolistsActions} from "../state/todoLists-reducer";
 import styled from "styled-components";
+import {useActions} from "../store/redux-utils";
 
 type PropsType = {
     filter: FilterValuesType

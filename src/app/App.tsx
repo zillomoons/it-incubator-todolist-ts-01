@@ -10,8 +10,8 @@ import {Header} from "../components";
 
 import {ErrorSnackBar} from "../common";
 import {selectIsInitialized} from "./selectors";
-import {useActions} from "../store/store";
 import {appActions} from "../state/app-reducer";
+import {useActions} from "../store/redux-utils";
 
 const App = () => {
     const isInitialized = useSelector(selectIsInitialized);

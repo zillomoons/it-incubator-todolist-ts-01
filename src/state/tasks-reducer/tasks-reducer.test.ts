@@ -1,10 +1,10 @@
 import {
     asyncActions,
-    tasksReducer,
     TaskStateType,
 } from "./tasks-reducer";
 import {todoListId_1, todoListId_2} from "../todoLists-reducer/todolists-reducer.test";
 import { TaskStatuses } from "../../api/todolists-api";
+import {tasksReducer} from "./index";
 
 let startState: TaskStateType;
 beforeEach(()=>{

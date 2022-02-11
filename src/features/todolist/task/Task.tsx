@@ -5,8 +5,8 @@ import {DeleteButton} from "../../../components/DeleteButton";
 import styled from "styled-components";
 import {TaskEntityType} from "../../../state/tasks-reducer/tasks-reducer";
 import {TaskStatuses} from "../../../api/todolists-api";
-import {useActions} from "../../../store/store";
 import {tasksActions} from "../../../state/tasks-reducer";
+import {useActions} from "../../../store/redux-utils";
 
 type PropsType = {
     todoID: string

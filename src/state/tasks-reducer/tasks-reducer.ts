@@ -159,7 +159,7 @@ export const slice = createSlice({
     }
 })
 
-export const tasksReducer = slice.reducer;
+// export const tasksReducer = slice.reducer;
 export const {changeTaskEntityStatus} = slice.actions;
 
 

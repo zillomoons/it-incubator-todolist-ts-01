@@ -1,10 +1,10 @@
 import {useFormik} from "formik";
 import styled from "styled-components";
-import {useAppDispatch} from "../../store/store";
 import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {selectIsLoggedIn} from "./selectors";
 import {authActions} from "../../state/auth-reducer";
+import {useAppDispatch} from "../../store/redux-utils";
 
 export const Login = () => {
     const dispatch = useAppDispatch();

@@ -12,7 +12,7 @@ import {TaskEntityType} from "../../state/tasks-reducer/tasks-reducer";
 import {RequestStatusType} from "../../state/app-reducer/app-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import {tasksActions} from "../../state/tasks-reducer";
-import {useAppDispatch} from "../../store/store";
+import {useAppDispatch} from "../../store/redux-utils";
 
 
 export const Todolist = React.memo(({tasks, title, todoID, filter, todoEntityStatus}: ToDoListPropsType) => {

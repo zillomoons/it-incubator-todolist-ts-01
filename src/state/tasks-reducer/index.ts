@@ -1,6 +1,12 @@
 import {asyncActions as tasksAsyncActions, slice} from './tasks-reducer';
 
-export const tasksActions = {
+const tasksReducer = slice.reducer;
+const tasksActions = {
     ...tasksAsyncActions,
     ...slice.actions
 };
+
+export {
+    tasksActions,
+    tasksReducer
+}
