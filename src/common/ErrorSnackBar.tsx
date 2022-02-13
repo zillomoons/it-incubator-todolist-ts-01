@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
 import {useActions} from "../store/redux-utils";
-import {appActions} from "../state/app-reducer";
+import {appActions} from "../state/app-reducer/app-common-actions";
 
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(

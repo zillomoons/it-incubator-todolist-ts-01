@@ -1,18 +1,17 @@
-import {Dispatch} from "redux";
-import {setAppError, setAppStatus} from "../state/app-reducer/app-reducer";
 import {ResponseType} from '../api/todolists-api'
 import {AxiosError} from "axios";
+import {appActions} from "../state/app-reducer/app-common-actions";
 
 
-export function handleServerAppError<T>(dispatch: Dispatch, data: ResponseType<T>) {
-    const message = data.messages.length > 0 ? data.messages[0] : 'Something went wrong';
-    dispatch(setAppError({error: message}));
-}
+// export function handleServerAppError<T>(dispatch: Dispatch, data: ResponseType<T>) {
+//     const message = data.messages.length > 0 ? data.messages[0] : 'Something went wrong';
+//     dispatch(setAppError({error: message}));
+// }
 type ThunkAPIType = {
     dispatch: (action: any) => any
     rejectWithValue: Function
 }
-
+const {setAppStatus, setAppError} = appActions;
 export function handleAsyncServerAppError <D>(data: ResponseType<D>, thunkAPI: ThunkAPIType, showError = true) {
     if (showError){
         thunkAPI.dispatch(setAppError({error: data.messages.length ? data.messages[0] : 'Some error'}))

@@ -21,7 +21,7 @@ beforeEach(()=> {
 
 test('todolist reducer should remove correct todolist', ()=> {
 
-    let changedState = todolistsReducer(state, asyncActions.deleteTodolist.fulfilled({todoID: todoListId_1}, '', todoListId_1))
+    let changedState = todolistsReducer(state, asyncActions.deleteTodolist.fulfilled( todoListId_1, '', todoListId_1))
 
     expect(changedState.length).toBe(1)
     expect(changedState[0].id).toBe(todoListId_2)

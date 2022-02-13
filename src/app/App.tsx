@@ -10,12 +10,12 @@ import {Header} from "../components";
 
 import {ErrorSnackBar} from "../common";
 import {selectIsInitialized} from "./selectors";
-import {appActions} from "../state/app-reducer";
 import {useActions} from "../store/redux-utils";
+import {appAsyncAction} from "../state/app-reducer";
 
 const App = () => {
     const isInitialized = useSelector(selectIsInitialized);
-    const {initializeApp} = useActions(appActions);
+    const {initializeApp} = useActions(appAsyncAction);
     useEffect(() => {
         initializeApp();
     }, [])

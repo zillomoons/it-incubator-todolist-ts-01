@@ -35,13 +35,9 @@ export const logout = createAsyncThunk(
                 return;
             } else {
                 return handleAsyncServerAppError(data, thunkAPI);
-                // handleServerAppError(thunkAPI.dispatch, data);
-                // return thunkAPI.rejectWithValue({});
             }
         } catch (e: any) {
             return handleAsyncNetworkError(e, thunkAPI);
-            // thunkAPI.dispatch(setAppError({error: e.message}));
-            // return thunkAPI.rejectWithValue({});
         } finally {
             preloaderControl('idle', thunkAPI.dispatch)
         }
@@ -72,6 +68,6 @@ export const slice = createSlice({
 })
 
 export const authReducer = slice.reducer;
-export const {setIsLoggedIn} = slice.actions;
+// export const {setIsLoggedIn} = slice.actions;
 
 

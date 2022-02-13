@@ -1,5 +1,6 @@
-import {RequestStatusType, setAppError, setAppStatus} from "./app-reducer";
+import {RequestStatusType} from "./app-reducer";
 import {appReducer} from "./index";
+import {appActions} from "./app-common-actions";
 
 let startState: AppInitialStateType;
 beforeEach(()=>{
@@ -11,12 +12,12 @@ beforeEach(()=>{
 })
 test('app reducer should set error', ()=> {
 
-    const endState = appReducer(startState, setAppError({error: 'some error'}))
+    const endState = appReducer(startState, appActions.setAppError({error: 'some error'}))
     expect(endState.error).not.toBe(null);
 })
 
 test('app reducer should set correct status', ()=> {
-    const endState = appReducer(startState, setAppStatus({status:'loading'}));
+    const endState = appReducer(startState, appActions.setAppStatus({status:'loading'}));
 
     expect(endState.status).toBe('loading')
 })

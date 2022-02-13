@@ -1,9 +1,9 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {todolistsAPI, TodolistType} from "../../api/todolists-api";
-import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
+import {RequestStatusType} from "../app-reducer/app-reducer";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes, asyncActions as todolistsAsyncActions} from "../tasks-reducer/tasks-reducer";
-import {handleAsyncNetworkError, handleServerAppError} from "../../utils/error-utils";
+import {handleAsyncNetworkError, handleAsyncServerAppError} from "../../utils/error-utils";
 import {ThunkErrorType} from "../../store/store";
 
 
@@ -18,7 +18,6 @@ const getTodolists = createAsyncThunk<TodolistType[], void, ThunkErrorType>(
                 ThunkAPI.dispatch(todolistsAsyncActions.getTasks(tl.id))
             })
             return data;
-
         } catch (error: any) {
             return handleAsyncNetworkError(error, ThunkAPI);
         } finally {
@@ -27,60 +26,54 @@ const getTodolists = createAsyncThunk<TodolistType[], void, ThunkErrorType>(
     })
 const createTodolist = createAsyncThunk<TodolistType, string, ThunkErrorType >(
     'todolists/createTodolist',
-    async (title, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch);
+    async (title, thunkAPI) => {
+        preloaderControl('loading', thunkAPI.dispatch);
         try {
             const {data} = await todolistsAPI.createTodolist(title);
             if (data.resultCode === ResultCodes.success) {
                 return data.data.item;
             } else {
-                // handleServerAppError(dispatch, data);
-                return rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors});
+                return handleAsyncServerAppError(data, thunkAPI)
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}));
-            return rejectWithValue({errors: [error.message], fieldsErrors: undefined});
+            return handleAsyncNetworkError(error, thunkAPI)
         } finally {
-            preloaderControl('idle', dispatch);
+            preloaderControl('idle', thunkAPI.dispatch);
         }
 
     })
-const deleteTodolist = createAsyncThunk(
+const deleteTodolist = createAsyncThunk<string, string, ThunkErrorType>(
     'todolists/deleteTodolist',
-    async (todoID: string, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch, todoID);
+    async (todoID, thunkAPI) => {
+        preloaderControl('loading', thunkAPI.dispatch, todoID);
         try {
             const {data} = await todolistsAPI.deleteTodolist(todoID);
             if (data.resultCode === ResultCodes.success) {
-                return {todoID};
+                return todoID;
             } else {
-                handleServerAppError(dispatch, data);
-                return rejectWithValue(null);
+                return handleAsyncServerAppError(data, thunkAPI)
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}));
-            return rejectWithValue(null);
+            return handleAsyncNetworkError(error, thunkAPI)
         } finally {
-            preloaderControl('idle', dispatch, todoID)
+            preloaderControl('idle', thunkAPI.dispatch, todoID)
         }
     })
-const updateTodoTitle = createAsyncThunk(
+const updateTodoTitle = createAsyncThunk<{ todoID: string, title: string }, { todoID: string, title: string }, ThunkErrorType>(
     'todolists, updateTodolist',
-    async (param: { todoID: string, title: string }, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch, param.todoID);
+    async (param, thunkAPI) => {
+        preloaderControl('loading', thunkAPI.dispatch, param.todoID);
         try {
             const {data} = await todolistsAPI.updateTodolist(param.todoID, param.title);
             if (data.resultCode === ResultCodes.success) {
                 return {todoID: param.todoID, title: param.title}
             } else {
-                handleServerAppError(dispatch, data);
-                return rejectWithValue(null);
+                return handleAsyncServerAppError(data, thunkAPI)
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}));
-            return rejectWithValue(null);
+            return handleAsyncNetworkError(error, thunkAPI)
         } finally {
-            preloaderControl('idle', dispatch, param.todoID);
+            preloaderControl('idle', thunkAPI.dispatch, param.todoID);
         }
     })
 
@@ -113,7 +106,7 @@ export const slice = createSlice({
                 state.unshift({...action.payload, filter: 'all', entityStatus: 'idle'})
             })
             .addCase(deleteTodolist.fulfilled, (state, action) => {
-                const index = state.findIndex(tl => tl.id === action.payload.todoID);
+                const index = state.findIndex(tl => tl.id === action.payload);
                 if (index > -1) state.splice(index, 1);
             })
             .addCase(updateTodoTitle.fulfilled, (state, action) => {

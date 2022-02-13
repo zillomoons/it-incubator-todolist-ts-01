@@ -1,11 +1,12 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {RequestStatusType, setAppError, setAppStatus} from "../app-reducer/app-reducer";
+import {RequestStatusType} from "../app-reducer/app-reducer";
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
 import {asyncActions as todolistsActions} from '../todoLists-reducer/todolists-reducer'
 import {preloaderControl} from "../../utils/preloaderControl";
-import {handleServerAppError} from "../../utils/error-utils";
+import {handleAsyncNetworkError, handleAsyncServerAppError} from "../../utils/error-utils";
 import {AppRootStateType, ThunkErrorType} from "../../store/store";
+import {appActions} from "../app-reducer/app-common-actions";
 
 
 //ResultCode statuses - indicates whether request to server was successful
@@ -16,23 +17,22 @@ export enum ResultCodes {
 }
 
 //AsyncActions
-const getTasks = createAsyncThunk(
+const getTasks = createAsyncThunk<{todoID: string, tasks: TaskType[]}, string, ThunkErrorType>(
     'tasks/fetchTasks',
-    async (todoID: string, thunkAPI) => {
+    async (todoID, thunkAPI) => {
         preloaderControl('loading', thunkAPI.dispatch);
         try {
             const {data} = await todolistsAPI.getTasks(todoID);
             return {todoID, tasks: data.items};
         } catch (error: any) {
-            thunkAPI.dispatch(setAppError({error: error.message}));
-            return thunkAPI.rejectWithValue(error.message)
+            return handleAsyncNetworkError(error, thunkAPI);
         } finally {
-            thunkAPI.dispatch(setAppStatus({status: 'idle'}))
+            thunkAPI.dispatch(appActions.setAppStatus({status: 'idle'}))
         }
     })
-const deleteTask = createAsyncThunk(
+const deleteTask = createAsyncThunk<{todoID: string, taskID: string}, { todoID: string, taskID: string }, ThunkErrorType >(
     'tasks/deleteTask',
-    async (param: { todoID: string, taskID: string }, thunkAPI) => {
+    async (param, thunkAPI) => {
         preloaderControl('loading', thunkAPI.dispatch, param.todoID, param.taskID);
 
         try {
@@ -40,46 +40,38 @@ const deleteTask = createAsyncThunk(
             if (data.resultCode === ResultCodes.success) {
                 return {todoID: param.todoID, taskID: param.taskID};
             } else {
-                handleServerAppError(thunkAPI.dispatch, data);
-                //should be replaced with more suitable action.payload
-                return thunkAPI.rejectWithValue('some error')
+                return handleAsyncServerAppError(data, thunkAPI);
             }
         } catch (error: any) {
-            thunkAPI.dispatch(setAppError({error: error.message}));
-            return thunkAPI.rejectWithValue(error.message)
+            return handleAsyncNetworkError(error, thunkAPI);
         } finally {
             preloaderControl('idle', thunkAPI.dispatch, param.todoID, param.taskID)
         }
     })
 const createTask = createAsyncThunk<TaskType, { todoID: string, title: string }, ThunkErrorType>(
     'tasks/createTask',
-    async (param, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch, param.todoID);
+    async (param,thunkAPI) => {
+        preloaderControl('loading', thunkAPI.dispatch, param.todoID);
 
         try {
             const {data} = await todolistsAPI.createTask(param.todoID, param.title)
             if (data.resultCode === ResultCodes.success) {
                 return data.data.item;
             } else {
-                // handleServerAppError(dispatch, data);
-                return rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
+                return handleAsyncServerAppError(data, thunkAPI)
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message})); // error will be handled locally
-            return rejectWithValue({errors: [error.message], fieldsErrors: undefined})
+           return handleAsyncNetworkError(error, thunkAPI);
         } finally {
-            preloaderControl('idle', dispatch, param.todoID);
+            preloaderControl('idle', thunkAPI.dispatch, param.todoID);
         }
     })
-const updateTask = createAsyncThunk(
+const updateTask = createAsyncThunk<UpdateTaskParamType, UpdateTaskParamType, ThunkErrorType>(
     'tasks/updateTask',
-    async (param: { todoID: string, taskID: string, model: UpdateTaskModelType }, {
-        dispatch,
-        rejectWithValue,
-        getState
-    }) => {
-        preloaderControl('loading', dispatch, param.todoID, param.taskID);
-        const state = getState() as AppRootStateType;
+    async (param, thunkAPI
+    ) => {
+        preloaderControl('loading', thunkAPI.dispatch, param.todoID, param.taskID);
+        const state = thunkAPI.getState() as AppRootStateType;
         const currentTask = state.tasks[param.todoID].find(t => t.id === param.taskID);
         try {
             if (currentTask) {
@@ -95,19 +87,14 @@ const updateTask = createAsyncThunk(
                 if (data.resultCode === ResultCodes.success) {
                     return param;
                 } else {
-                    handleServerAppError(dispatch, data);
-                    //should be replaced with more suitable action.payload
-                    return rejectWithValue(null);
+                    return handleAsyncServerAppError(data, thunkAPI);
                 }
-            } else {
-                return rejectWithValue(null);
             }
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}));
-            return rejectWithValue(null)
+            handleAsyncNetworkError(error, thunkAPI)
 
         } finally {
-            preloaderControl('idle', dispatch, param.todoID, param.taskID)
+            preloaderControl('idle', thunkAPI.dispatch, param.todoID, param.taskID)
         }
     })
 
@@ -134,7 +121,7 @@ export const slice = createSlice({
                 state[action.payload.id] = [];
             })
             .addCase(todolistsActions.deleteTodolist.fulfilled, (state, action) => {
-                delete state[action.payload.todoID];
+                delete state[action.payload];
             })
             .addCase(todolistsActions.getTodolists.fulfilled, (state, action) => {
                 action.payload.forEach(tl => state[tl.id] = []);
@@ -176,6 +163,7 @@ type UpdateTaskModelType = {
     startDate?: string
     deadline?: string
 }
+type UpdateTaskParamType = { todoID: string, taskID: string, model: UpdateTaskModelType };
 
 
 

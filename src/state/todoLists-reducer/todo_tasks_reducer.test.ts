@@ -71,7 +71,7 @@ test('property with todoID should be deleted from Tasks state', ()=>{
                 addedDate: ''},
         ]
     }
-    const action = asyncActions.deleteTodolist.fulfilled({todoID: todoListId_2}, '',  todoListId_2);
+    const action = asyncActions.deleteTodolist.fulfilled(todoListId_2, '',  todoListId_2);
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)
