@@ -3,8 +3,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
-import {handleAsyncNetworkError, handleAsyncServerAppError, handleServerAppError} from "../../utils/error-utils";
-import {setAppError} from "../app-reducer/app-reducer";
+import {handleAsyncNetworkError, handleAsyncServerAppError, } from "../../utils/error-utils";
 import {ThunkErrorType} from "../../store/store";
 
 //RTK asyncThunks
