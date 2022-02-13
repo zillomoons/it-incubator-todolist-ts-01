@@ -1,18 +1,19 @@
 import React from "react"
 import styled from "styled-components";
 import LinearProgress from "@mui/material/LinearProgress";
-import {useAppSelector} from "../store/store";
-import {RequestStatusType} from "../state/app-reducer/app-reducer";
-import {useDispatch} from "react-redux";
-import {logout} from "../state/auth-reducer/auth-reducer";
+import {useSelector} from "react-redux";
 import { AiOutlineLogout } from "react-icons/ai";
+import {selectStatus} from "../app/selectors";
+import {authSelectors} from "../features/login";
+import {useActions} from "../store/redux-utils";
+import {authActions} from "../state/auth-reducer";
 
 export const Header = React.memo(() => {
-    const status = useAppSelector<RequestStatusType>(state => state.app.status);
-    const isLoggedIn = useAppSelector<boolean>(state=> state.auth.isLoggedIn);
-    const dispatch = useDispatch();
+    const status = useSelector(selectStatus);
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+    const {logout} = useActions(authActions);
     const onLogout = () =>{
-        dispatch(logout());
+        logout();
     }
     return (
         <>
