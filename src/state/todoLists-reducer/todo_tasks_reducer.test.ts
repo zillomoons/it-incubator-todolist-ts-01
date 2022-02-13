@@ -85,7 +85,7 @@ test('empty arrays should be added when we set todolists', ()=> {
         {id: '1', title: 'What to read', addedDate: '', order: 0},
         {id: '3', title: 'What to watch', addedDate: '', order: 0},
     ]
-    const endState = tasksReducer({}, asyncActions.getTodolists.fulfilled({todolists}, ''))
+    const endState = tasksReducer({}, asyncActions.getTodolists.fulfilled(todolists, ''))
 
     const keys = Object.keys(endState)
 

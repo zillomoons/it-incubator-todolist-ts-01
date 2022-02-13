@@ -3,27 +3,26 @@ import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import {RequestStatusType, setAppError} from "../app-reducer/app-reducer";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes, asyncActions as todolistsAsyncActions} from "../tasks-reducer/tasks-reducer";
-import {handleServerAppError} from "../../utils/error-utils";
+import {handleAsyncNetworkError, handleServerAppError} from "../../utils/error-utils";
 import {ThunkErrorType} from "../../store/store";
 
 
-const getTodolists = createAsyncThunk(
+const getTodolists = createAsyncThunk<TodolistType[], void, ThunkErrorType>(
     'todolists/getTodolists',
-    async (param, {dispatch, rejectWithValue}) => {
-        preloaderControl('loading', dispatch);
+    async (param, ThunkAPI) => {
+        preloaderControl('loading', ThunkAPI.dispatch);
         try {
             const {data} = await todolistsAPI.getTodolists();
             //getting tasks for each todolist
             data.forEach(tl => {
-                dispatch(todolistsAsyncActions.getTasks(tl.id))
+                ThunkAPI.dispatch(todolistsAsyncActions.getTasks(tl.id))
             })
-            return {todolists: data};
+            return data;
 
         } catch (error: any) {
-            dispatch(setAppError({error: error.message}))
-            return rejectWithValue(null);
+            return handleAsyncNetworkError(error, ThunkAPI);
         } finally {
-            preloaderControl('idle', dispatch)
+            preloaderControl('idle', ThunkAPI.dispatch)
         }
     })
 const createTodolist = createAsyncThunk<TodolistType, string, ThunkErrorType >(
@@ -108,7 +107,7 @@ export const slice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getTodolists.fulfilled, (state, action) => {
-                return action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
+                return action.payload.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
             })
             .addCase(createTodolist.fulfilled, (state, action) => {
                 state.unshift({...action.payload, filter: 'all', entityStatus: 'idle'})

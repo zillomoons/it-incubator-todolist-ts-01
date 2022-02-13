@@ -137,7 +137,7 @@ export const slice = createSlice({
                 delete state[action.payload.todoID];
             })
             .addCase(todolistsActions.getTodolists.fulfilled, (state, action) => {
-                action.payload.todolists.forEach(tl => state[tl.id] = []);
+                action.payload.forEach(tl => state[tl.id] = []);
             })
             .addCase(getTasks.fulfilled, (state, action) => {
                 state[action.payload.todoID] = action.payload.tasks.map(t => ({...t, entityStatus: 'idle'}));

@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
-import {handleServerAppError} from "../../utils/error-utils";
+import {handleAsyncNetworkError, handleAsyncServerAppError, handleServerAppError} from "../../utils/error-utils";
 import {setAppError} from "../app-reducer/app-reducer";
 import {ThunkErrorType} from "../../store/store";
 
@@ -17,12 +17,10 @@ export const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType
             if (data.resultCode === ResultCodes.success) {
                 return;
             } else {
-                handleServerAppError(thunkAPI.dispatch, data)
-                return thunkAPI.rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
+                return handleAsyncServerAppError(data, thunkAPI)
             }
         } catch (e: any) {
-            thunkAPI.dispatch(setAppError({error: e.message}));
-            return thunkAPI.rejectWithValue({errors: [e.message], fieldsErrors: undefined})
+            return handleAsyncNetworkError(e, thunkAPI)
         } finally {
             preloaderControl('idle', thunkAPI.dispatch)
         }
@@ -37,12 +35,14 @@ export const logout = createAsyncThunk(
             if (data.resultCode === ResultCodes.success) {
                 return;
             } else {
-                handleServerAppError(thunkAPI.dispatch, data);
-                return thunkAPI.rejectWithValue({});
+                return handleAsyncServerAppError(data, thunkAPI);
+                // handleServerAppError(thunkAPI.dispatch, data);
+                // return thunkAPI.rejectWithValue({});
             }
         } catch (e: any) {
-            thunkAPI.dispatch(setAppError({error: e.message}));
-            return thunkAPI.rejectWithValue({});
+            return handleAsyncNetworkError(e, thunkAPI);
+            // thunkAPI.dispatch(setAppError({error: e.message}));
+            // return thunkAPI.rejectWithValue({});
         } finally {
             preloaderControl('idle', thunkAPI.dispatch)
         }

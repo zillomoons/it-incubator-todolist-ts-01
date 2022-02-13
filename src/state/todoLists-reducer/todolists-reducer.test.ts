@@ -61,7 +61,7 @@ test('todolist reducer should set todolists with filter to the state ', () => {
         {id: '1', title: 'What to read', addedDate: '', order: 0},
         {id: '3', title: 'What to watch', addedDate: '', order: 0},
     ]
-    const endState = todolistsReducer(state, asyncActions.getTodolists.fulfilled({todolists}, ''))
+    const endState = todolistsReducer(state, asyncActions.getTodolists.fulfilled(todolists, ''))
 
     expect(endState.length).toBe(3)
     expect(endState[0].id).toBe('2')
