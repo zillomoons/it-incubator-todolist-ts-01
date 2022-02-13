@@ -1,5 +1,4 @@
-import {authReducer} from "./auth-reducer";
-import {authActions} from "./index";
+import {authActions, authReducer} from "./index";
 
 type AuthInitStateType = { isLoggedIn: boolean };
 

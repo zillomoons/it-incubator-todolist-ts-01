@@ -1,10 +1,11 @@
 import {RequestStatusType} from "../state/app-reducer/app-reducer";
-import {changeEntityStatus} from "../state/todoLists-reducer/todolists-reducer";
 import {Dispatch} from "redux";
-import {changeTaskEntityStatus} from "../state/tasks-reducer/tasks-reducer";
 import {appActions} from "../state/app-reducer/app-common-actions";
+import {todolistsActions} from "../state/todoLists-reducer";
+import {tasksActions} from "../state/tasks-reducer";
 
-
+const {changeEntityStatus} = todolistsActions;
+const {changeTaskEntityStatus} = tasksActions;
 export const preloaderControl = (status: RequestStatusType, dispatch: Dispatch, todoID?: string, taskID?: string) => {
     dispatch(appActions.setAppStatus({status}));
     todoID && dispatch(changeEntityStatus({todoID, status}));

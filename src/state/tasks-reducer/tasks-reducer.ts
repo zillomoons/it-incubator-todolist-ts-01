@@ -144,10 +144,7 @@ export const slice = createSlice({
                 if (index > -1) state[tlId][index] = {...state[tlId][index], ...action.payload.model}
             })
     }
-})
-
-// export const tasksReducer = slice.reducer;
-export const {changeTaskEntityStatus} = slice.actions;
+});
 
 
 //Types

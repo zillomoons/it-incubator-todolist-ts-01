@@ -3,12 +3,12 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {preloaderControl} from "../../utils/preloaderControl";
 import {ResultCodes} from "../tasks-reducer/tasks-reducer";
-import {handleAsyncNetworkError, handleAsyncServerAppError, } from "../../utils/error-utils";
+import {handleAsyncNetworkError, handleAsyncServerAppError,} from "../../utils/error-utils";
 import {ThunkErrorType} from "../../store/store";
 
 //RTK asyncThunks
 export const login = createAsyncThunk<undefined, LoginParamsType, ThunkErrorType>(
-        'auth/login',
+    'auth/login',
     async (param, thunkAPI) => {
         preloaderControl('loading', thunkAPI.dispatch);
         try {
@@ -65,9 +65,6 @@ export const slice = createSlice({
             })
 
     }
-})
-
-export const authReducer = slice.reducer;
-// export const {setIsLoggedIn} = slice.actions;
+});
 
 

@@ -23,7 +23,7 @@ const getTodolists = createAsyncThunk<TodolistType[], void, ThunkErrorType>(
         } finally {
             preloaderControl('idle', ThunkAPI.dispatch)
         }
-    })
+    });
 const createTodolist = createAsyncThunk<TodolistType, string, ThunkErrorType >(
     'todolists/createTodolist',
     async (title, thunkAPI) => {
@@ -41,7 +41,7 @@ const createTodolist = createAsyncThunk<TodolistType, string, ThunkErrorType >(
             preloaderControl('idle', thunkAPI.dispatch);
         }
 
-    })
+    });
 const deleteTodolist = createAsyncThunk<string, string, ThunkErrorType>(
     'todolists/deleteTodolist',
     async (todoID, thunkAPI) => {
@@ -58,7 +58,7 @@ const deleteTodolist = createAsyncThunk<string, string, ThunkErrorType>(
         } finally {
             preloaderControl('idle', thunkAPI.dispatch, todoID)
         }
-    })
+    });
 const updateTodoTitle = createAsyncThunk<{ todoID: string, title: string }, { todoID: string, title: string }, ThunkErrorType>(
     'todolists, updateTodolist',
     async (param, thunkAPI) => {
@@ -75,7 +75,7 @@ const updateTodoTitle = createAsyncThunk<{ todoID: string, title: string }, { to
         } finally {
             preloaderControl('idle', thunkAPI.dispatch, param.todoID);
         }
-    })
+    });
 
 export const asyncActions = {
     getTodolists,
@@ -114,11 +114,9 @@ export const slice = createSlice({
                 if (index > -1) state[index].title = action.payload.title;
             })
     }
-})
+});
 
-// export const todolistsReducer = slice.reducer;
-//Action creators
-export const {changeFilter, changeEntityStatus} = slice.actions;
+export const todolistsReducer = slice.reducer;
 
 //Types
 export type FilterValuesType = 'all' | 'completed' | 'active'
